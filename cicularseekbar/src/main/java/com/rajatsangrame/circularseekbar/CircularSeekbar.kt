@@ -7,11 +7,13 @@ import android.graphics.Paint
 import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
 import com.rajatsangrame.circularseekbar.Util.dpToPx
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sin
@@ -25,15 +27,15 @@ class CircularSeekbar : View {
     private val center = PointF(0f, 0f)
     private var isThumbTouchEvent = false
 
-    private var progress: Float = 0f
+    private var progress: Float = 0.1f
 
-    private var thumbPadding = 8.dpToPx
+    private var thumbPadding = 4.dpToPx
     private var thickness = 20.dpToPx
     private var thumbRadius = 10.dpToPx
+    private var startAngle = StartAngle.TOP
 
     private var showThumb = true
-    private var disableTouchEvent = false
-
+    private var updateProgressOnTouch = false
 
     private val thumbPaint = Paint().also {
         it.isAntiAlias = true
@@ -63,6 +65,13 @@ class CircularSeekbar : View {
         defStyleAttr
     )
 
+    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+        super.setPadding(left, top, right, bottom)
+        if (left != top || left != bottom || left != right) {
+            Log.e(TAG, "setPadding: Padding should be same for all.")
+        }
+    }
+
     constructor(
         context: Context?,
         attrs: AttributeSet?,
@@ -72,9 +81,11 @@ class CircularSeekbar : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         center.x = width / 2f
         center.y = height / 2f
-        outerRadius = min(center.x, center.y)
+
+        outerRadius = min(center.x - paddingLeft, center.y - paddingRight)
         innerRadius = outerRadius - thickness / 2
 
         rectF.set(
@@ -84,14 +95,18 @@ class CircularSeekbar : View {
             (center.y + innerRadius)
         )
         val sweepAngle = (360 * progress) / 100
-        canvas.drawArc(rectF, -90f, 360f, false, backgroundPaint)
-        canvas.drawArc(rectF, -90f, sweepAngle, false, progressPaint)
+        canvas.drawArc(rectF, startAngle.value, 360f, false, backgroundPaint)
+        canvas.drawArc(rectF, startAngle.value, sweepAngle, false, progressPaint)
         if (showThumb) {
-            val sweepAngleRadians = Math.toRadians(-90f + sweepAngle.toDouble())
+            val sweepAngleRadians = Math.toRadians(startAngle.value + sweepAngle.toDouble())
             val cx = rectF.centerX() + (rectF.width() / 2) * cos(sweepAngleRadians)
             val cy = rectF.centerY() + (rectF.height() / 2) * sin(sweepAngleRadians)
             canvas.drawCircle(cx.toFloat(), cy.toFloat(), thumbRadius, thumbPaint)
         }
+    }
+
+    fun setStartAngle(startAngle: StartAngle) {
+        this.startAngle = startAngle
     }
 
     fun setThickness(size: Int) {
@@ -132,13 +147,20 @@ class CircularSeekbar : View {
         thumbRadius = radius.dpToPx
     }
 
-    fun setThumbPadding(padding: Float) {
+    /**
+     *  Adjust the thumb padding surface according. This can be useful if thumb radius
+     *  is small and difficult to touch
+     */
+    fun setThumbPadding(padding: Int) {
+        this.thumbPadding = padding.dpToPx
+    }
 
-        val range = 1f..100f
-        if (padding !in range) {
-            throw IllegalArgumentException("$padding is out of range. It should lies between 1 ot  to 100")
-        }
-        this.thumbPadding = padding
+    fun setShowThumb(boolean: Boolean) {
+        this.showThumb = boolean
+    }
+
+    fun setUpdateProgressOnTouch(boolean: Boolean) {
+        this.updateProgressOnTouch = boolean
     }
 
     /**
@@ -147,28 +169,30 @@ class CircularSeekbar : View {
      */
     private fun isProgressBarRegion(p: PointF): Boolean {
         val distance = sqrt((p.x - center.x).pow(2) + (p.y - center.y).pow(2))
-        return (distance in (innerRadius - thumbPadding)..(outerRadius + thumbPadding))
+        // selecting max touch area according to padding or thumb radius
+        val padding = max(thumbPadding, thumbRadius * 2)
+        return (distance in (innerRadius - padding)..(outerRadius + padding))
     }
 
     private fun getSweepAngle(p: PointF): Float {
         val angleRadians = kotlin.math.atan2(p.y - center.y, p.x - center.x)
-        var angleDegrees = Math.toDegrees(angleRadians.toDouble())
+        var angleDegrees = Math.toDegrees(angleRadians.toDouble()).toFloat()
         if (angleDegrees < 0) {
             // Convert negative angles to positive
-            angleDegrees += 360.0
+            angleDegrees += 360.0f
         }
-        // Adjust so that 12 o'clock is 0 degrees
-        angleDegrees -= 270.0
+        // Adjust values according to startAngle
+        angleDegrees -= 360f + startAngle.value
         if (angleDegrees < 0) {
-            // Convert negative angles to positive
-            angleDegrees += 360.0
+            // Convert agiain if negative values exists
+            angleDegrees += 360.0f
         }
-        return angleDegrees.toFloat()
+        return angleDegrees
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        if (disableTouchEvent) return false
+        if (!updateProgressOnTouch) return false
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -203,10 +227,14 @@ class CircularSeekbar : View {
         return super.onTouchEvent(event)
     }
 
-    enum class StartAngle(value: Float) {
-        UP(-90f),
+    enum class StartAngle(val value: Float) {
+        TOP(-90f),
         LEFT(-180f),
         BOTTOM(-270f),
         RIGHT(0f),
+    }
+
+    companion object {
+        private const val TAG = "CircularSeekbar"
     }
 }
