@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.rajatsangrame.circularseekbar.CircularSeekbar;
 
-public class JavaMainActivity extends AppCompatActivity {
+public class JavaSampleActivity extends AppCompatActivity {
 
     private static final String TAG = "JavaSample";
 
@@ -31,7 +31,7 @@ public class JavaMainActivity extends AppCompatActivity {
         seekbar.setThumbRadius(16);
         seekbar.setThumbPadding(8);
         seekbar.setShowThumb(true);
-        seekbar.setUpdateProgressOnTouch(true);
+        seekbar.setEnableTouch(true);
         seekbar.setProgress(20f);
 
         Log.d(TAG, "onCreate: ${seekbar.getProgress()}");

@@ -20,7 +20,25 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class CircularSeekbar : View {
+class CircularSeekbar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : View(context, attrs, defStyleAttr, defStyleRes) {
+
+    companion object {
+        private const val TAG = "CircularSeekbar"
+        const val DEFAULT_PROGRESS_COLOR = Color.WHITE
+        const val DEFAULT_BG_COLOR = Color.GRAY
+        const val DEFAULT_THUMB_COLOR = Color.WHITE
+        const val DEFAULT_THICKNESS_DP = 20
+        const val DEFAULT_THUMB_RADIUS_DP = 10
+        const val DEFAULT_THUMB_PADDING_DP = 4
+        const val DEFAULT_PROGRESS = 0.1f
+        const val DEFAULT_SHOW_THUMB = true
+        const val DEFAULT_ENABLE_TOUCH = true
+    }
 
     private val rectF = RectF()
     private var innerRadius = 0f
@@ -28,43 +46,35 @@ class CircularSeekbar : View {
     private val center = PointF(0f, 0f)
     private var isThumbTouchEvent = false
 
-    private var progress: Float = 0.1f
+    private var progress: Float = DEFAULT_PROGRESS
 
     private var thumbPadding = 4.dpToPx
     private var thickness = 20.dpToPx
     private var thumbRadius = 10.dpToPx
     private var startAngle: StartAngle = StartAngle.TOP
 
-    private var showThumb = true
-    private var updateProgressOnTouch = false
+    private var showThumb = DEFAULT_SHOW_THUMB
+    private var enableTouch = DEFAULT_ENABLE_TOUCH
 
     private val thumbPaint = Paint().also {
         it.isAntiAlias = true
         it.style = Paint.Style.FILL_AND_STROKE
-        it.color = Color.WHITE
+        it.color = DEFAULT_THUMB_COLOR
     }
 
     private val backgroundPaint = Paint().also {
         it.isAntiAlias = true
         it.style = Paint.Style.STROKE
         it.strokeWidth = this.thickness
-        it.color = Color.GRAY
+        it.color = DEFAULT_BG_COLOR
     }
 
     private val progressPaint = Paint().also {
         it.isAntiAlias = true
         it.style = Paint.Style.STROKE
         it.strokeWidth = this.thickness
-        it.color = Color.WHITE
+        it.color = DEFAULT_PROGRESS_COLOR
     }
-
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    )
 
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         super.setPadding(left, top, right, bottom)
@@ -72,13 +82,6 @@ class CircularSeekbar : View {
             Log.e(TAG, "setPadding: Padding should be same for all.")
         }
     }
-
-    constructor(
-        context: Context?,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -169,8 +172,8 @@ class CircularSeekbar : View {
         this.showThumb = boolean
     }
 
-    fun setUpdateProgressOnTouch(boolean: Boolean) {
-        this.updateProgressOnTouch = boolean
+    fun setEnableTouch(boolean: Boolean) {
+        this.enableTouch = boolean
     }
 
     /**
@@ -202,7 +205,7 @@ class CircularSeekbar : View {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        if (!updateProgressOnTouch) return false
+        if (!enableTouch) return false
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -240,11 +243,64 @@ class CircularSeekbar : View {
     sealed class StartAngle(val value: Float) {
         data object TOP : StartAngle(-90f)
         data object LEFT : StartAngle(-180f)
-        data object BOTTOM : StartAngle(-270f)
         data object RIGHT : StartAngle(0f)
+        data object BOTTOM : StartAngle(-270f)
+        companion object {
+            fun get(index: Int): StartAngle {
+                return when (index) {
+                    0 -> TOP
+                    1 -> LEFT
+                    2 -> RIGHT
+                    3 -> BOTTOM
+                    else -> throw IllegalArgumentException("Invalid value for StartAngle: $index")
+                }
+            }
+        }
     }
 
-    companion object {
-        private const val TAG = "CircularSeekbar"
+    init {
+        attrs?.let {
+            val array = context.obtainStyledAttributes(it, R.styleable.CircularSeekbar)
+            val bgColor =
+                array.getColor(R.styleable.CircularSeekbar_backgroundColor, DEFAULT_BG_COLOR)
+            val progressColor = array.getColor(
+                R.styleable.CircularSeekbar_progressColor,
+                DEFAULT_PROGRESS_COLOR
+            )
+            val thumbColor =
+                array.getColor(R.styleable.CircularSeekbar_thumbColor, DEFAULT_THUMB_COLOR)
+            val thickness =
+                array.getInteger(R.styleable.CircularSeekbar_thickness, DEFAULT_THICKNESS_DP)
+            val thumbPadding =
+                array.getInteger(R.styleable.CircularSeekbar_progress, DEFAULT_THUMB_PADDING_DP)
+            val thumbRadius =
+                array.getInteger(R.styleable.CircularSeekbar_progress, DEFAULT_THUMB_RADIUS_DP)
+
+            val progress =
+                array.getFloat(R.styleable.CircularSeekbar_progress, DEFAULT_PROGRESS)
+
+            val showThumb =
+                array.getBoolean(R.styleable.CircularSeekbar_showThumb, DEFAULT_SHOW_THUMB)
+            val enableTouch =
+                array.getBoolean(
+                    R.styleable.CircularSeekbar_enableTouch,
+                    DEFAULT_ENABLE_TOUCH
+                )
+            val startAngle: StartAngle =
+                StartAngle.get(array.getInt(R.styleable.CircularSeekbar_startAngle, 0))
+
+            setBackgroundColor(bgColor)
+            setProgressColor(progressColor)
+            setThumbColor(thumbColor)
+            setThickness(thickness)
+            setThumbRadius(thumbRadius)
+            setThumbPadding(thumbPadding)
+            this.showThumb = showThumb
+            this.enableTouch = enableTouch
+            this.progress = progress
+            this.startAngle = startAngle
+
+            array.recycle()
+        }
     }
 }

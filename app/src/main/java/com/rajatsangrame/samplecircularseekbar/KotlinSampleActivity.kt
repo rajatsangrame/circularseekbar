@@ -10,7 +10,7 @@ import android.util.Log
 import android.widget.Button
 import com.rajatsangrame.circularseekbar.CircularSeekbar
 
-class KotlinMainActivity : AppCompatActivity() {
+class KotlinSampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class KotlinMainActivity : AppCompatActivity() {
         seekbar.setThumbRadius(16)
         seekbar.setThumbPadding(8)
         seekbar.setShowThumb(true)
-        seekbar.setUpdateProgressOnTouch(true)
+        seekbar.setEnableTouch(true)
         seekbar.setProgress(20f)
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -37,7 +37,7 @@ class KotlinMainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: ${seekbar.getProgress()}")
 
         findViewById<Button>(R.id.button).setOnClickListener {
-            startActivity(Intent(this, JavaMainActivity::class.java))
+            startActivity(Intent(this, JavaSampleActivity::class.java))
         }
     }
 

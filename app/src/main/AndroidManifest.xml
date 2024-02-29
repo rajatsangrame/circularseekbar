@@ -13,7 +13,7 @@
         android:theme="@style/Theme.CircularProgressIndicator"
         tools:targetApi="31">
         <activity
-            android:name=".KotlinMainActivity"
+            android:name=".KotlinSampleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".JavaMainActivity"
+            android:name=".JavaSampleActivity"
             android:exported="true" />
     </application>
 
