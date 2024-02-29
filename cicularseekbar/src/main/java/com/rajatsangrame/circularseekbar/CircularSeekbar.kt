@@ -33,9 +33,9 @@ class CircularSeekbar @JvmOverloads constructor(
         const val DEFAULT_PROGRESS_COLOR = Color.WHITE
         const val DEFAULT_BG_COLOR = Color.GRAY
         const val DEFAULT_THUMB_COLOR = Color.WHITE
-        const val DEFAULT_THICKNESS_PX = 20f
-        const val DEFAULT_THUMB_RADIUS_PX = 10f
-        const val DEFAULT_THUMB_PADDING_PX = 4f
+        const val DEFAULT_THICKNESS_DP = 20
+        const val DEFAULT_THUMB_RADIUS_DP = 10
+        const val DEFAULT_THUMB_PADDING_DP = 4
         const val DEFAULT_PROGRESS = 0.1f
         const val DEFAULT_SHOW_THUMB = true
         const val DEFAULT_ENABLE_TOUCH = true
@@ -45,13 +45,17 @@ class CircularSeekbar @JvmOverloads constructor(
     private var innerRadius = 0f
     private var outerRadius = 0f
     private val center = PointF(0f, 0f)
+
+    /**
+     * This is used in onTouchEvent to simulate the seekbar progress
+     */
     private var isThumbTouchEvent = false
 
     private var progress: Float = DEFAULT_PROGRESS
 
-    private var thumbPadding = 4.dpToPx
-    private var thickness = 20.dpToPx
-    private var thumbRadius = 10.dpToPx
+    private var thumbPadding = DEFAULT_THUMB_PADDING_DP.dpToPx
+    private var thickness = DEFAULT_THICKNESS_DP.dpToPx
+    private var thumbRadius = DEFAULT_THUMB_RADIUS_DP.dpToPx
     private var startAngle: StartAngle = StartAngle.TOP
 
     private var showThumb = DEFAULT_SHOW_THUMB
@@ -283,14 +287,20 @@ class CircularSeekbar @JvmOverloads constructor(
             val thumbColor =
                 array.getColor(R.styleable.CircularSeekbar_thumbColor, DEFAULT_THUMB_COLOR)
             val thickness =
-                array.getDimension(R.styleable.CircularSeekbar_thickness, DEFAULT_THICKNESS_PX)
+                array.getDimension(
+                    R.styleable.CircularSeekbar_thickness,
+                    DEFAULT_THICKNESS_DP.dpToPx
+                )
             val thumbPadding =
                 array.getDimension(
                     R.styleable.CircularSeekbar_thumbPadding,
-                    DEFAULT_THUMB_PADDING_PX
+                    DEFAULT_THUMB_PADDING_DP.dpToPx
                 )
             val thumbRadius =
-                array.getDimension(R.styleable.CircularSeekbar_thumbRadius, DEFAULT_THUMB_RADIUS_PX)
+                array.getDimension(
+                    R.styleable.CircularSeekbar_thumbRadius,
+                    DEFAULT_THUMB_RADIUS_DP.dpToPx
+                )
 
             val progress =
                 array.getFloat(R.styleable.CircularSeekbar_progress, DEFAULT_PROGRESS)
