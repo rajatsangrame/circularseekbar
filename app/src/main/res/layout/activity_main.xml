@@ -11,10 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:padding="24dp"
+        app:backgroundColor="@android:color/holo_purple"
+        app:enableTouch="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:progress="22"
+        app:progressColor="@android:color/holo_orange_dark"
+        app:showThumb="true"
+        app:startAngle="top"
+        app:thickness="20dp"
+        app:thumbColor="@android:color/holo_blue_bright"
+        app:thumbPadding="4dp"
+        app:thumbRadius="16dp" />
 
     <Button
         android:id="@+id/button"

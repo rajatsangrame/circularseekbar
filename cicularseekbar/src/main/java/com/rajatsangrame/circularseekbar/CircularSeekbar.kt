@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.Px
 import com.rajatsangrame.circularseekbar.Util.dpToPx
 import kotlin.math.cos
 import kotlin.math.max
@@ -32,9 +33,9 @@ class CircularSeekbar @JvmOverloads constructor(
         const val DEFAULT_PROGRESS_COLOR = Color.WHITE
         const val DEFAULT_BG_COLOR = Color.GRAY
         const val DEFAULT_THUMB_COLOR = Color.WHITE
-        const val DEFAULT_THICKNESS_DP = 20
-        const val DEFAULT_THUMB_RADIUS_DP = 10
-        const val DEFAULT_THUMB_PADDING_DP = 4
+        const val DEFAULT_THICKNESS_PX = 20f
+        const val DEFAULT_THUMB_RADIUS_PX = 10f
+        const val DEFAULT_THUMB_PADDING_PX = 4f
         const val DEFAULT_PROGRESS = 0.1f
         const val DEFAULT_SHOW_THUMB = true
         const val DEFAULT_ENABLE_TOUCH = true
@@ -114,9 +115,13 @@ class CircularSeekbar @JvmOverloads constructor(
     }
 
     fun setThickness(size: Int) {
-        progressPaint.strokeWidth = size.dpToPx
-        backgroundPaint.strokeWidth = size.dpToPx
-        thickness = size.dpToPx
+        setThickness(size.dpToPx)
+    }
+
+    private fun setThickness(@Px size: Float) {
+        progressPaint.strokeWidth = size
+        backgroundPaint.strokeWidth = size
+        thickness = size
     }
 
     fun setProgress(progress: Float) {
@@ -157,7 +162,11 @@ class CircularSeekbar @JvmOverloads constructor(
     }
 
     fun setThumbRadius(radius: Int) {
-        thumbRadius = radius.dpToPx
+        setThumbRadius(radius.dpToPx)
+    }
+
+    private fun setThumbRadius(@Px radius: Float) {
+        thumbRadius = radius
     }
 
     /**
@@ -165,7 +174,11 @@ class CircularSeekbar @JvmOverloads constructor(
      *  is small and difficult to touch
      */
     fun setThumbPadding(padding: Int) {
-        this.thumbPadding = padding.dpToPx
+        setThumbPadding(padding.dpToPx)
+    }
+
+    private fun setThumbPadding(@Px padding: Float) {
+        this.thumbPadding = padding
     }
 
     fun setShowThumb(boolean: Boolean) {
@@ -248,8 +261,8 @@ class CircularSeekbar @JvmOverloads constructor(
         companion object {
             fun get(index: Int): StartAngle {
                 return when (index) {
-                    0 -> TOP
-                    1 -> LEFT
+                    0 -> LEFT
+                    1 -> TOP
                     2 -> RIGHT
                     3 -> BOTTOM
                     else -> throw IllegalArgumentException("Invalid value for StartAngle: $index")
@@ -270,11 +283,14 @@ class CircularSeekbar @JvmOverloads constructor(
             val thumbColor =
                 array.getColor(R.styleable.CircularSeekbar_thumbColor, DEFAULT_THUMB_COLOR)
             val thickness =
-                array.getInteger(R.styleable.CircularSeekbar_thickness, DEFAULT_THICKNESS_DP)
+                array.getDimension(R.styleable.CircularSeekbar_thickness, DEFAULT_THICKNESS_PX)
             val thumbPadding =
-                array.getInteger(R.styleable.CircularSeekbar_progress, DEFAULT_THUMB_PADDING_DP)
+                array.getDimension(
+                    R.styleable.CircularSeekbar_thumbPadding,
+                    DEFAULT_THUMB_PADDING_PX
+                )
             val thumbRadius =
-                array.getInteger(R.styleable.CircularSeekbar_progress, DEFAULT_THUMB_RADIUS_DP)
+                array.getDimension(R.styleable.CircularSeekbar_thumbRadius, DEFAULT_THUMB_RADIUS_PX)
 
             val progress =
                 array.getFloat(R.styleable.CircularSeekbar_progress, DEFAULT_PROGRESS)
@@ -287,7 +303,7 @@ class CircularSeekbar @JvmOverloads constructor(
                     DEFAULT_ENABLE_TOUCH
                 )
             val startAngle: StartAngle =
-                StartAngle.get(array.getInt(R.styleable.CircularSeekbar_startAngle, 0))
+                StartAngle.get(array.getInteger(R.styleable.CircularSeekbar_startAngle, 0))
 
             setBackgroundColor(bgColor)
             setProgressColor(progressColor)

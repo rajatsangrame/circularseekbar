@@ -16,13 +16,30 @@ public class JavaSampleActivity extends AppCompatActivity {
 
     private static final String TAG = "JavaSample";
 
+    private CircularSeekbar seekbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(TAG);
 
-        final CircularSeekbar seekbar = findViewById(R.id.circularseekbar);
+        seekbar = findViewById(R.id.circularseekbar);
+
+        // Comment this to override values defined in the xml
+        // updateSeekbarValues()
+
+        Log.d(TAG, "onCreate: ${seekbar.getProgress()}");
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            seekbar.setAnimatedProgress(75f, 800L);
+        }, 800);
+
+        findViewById(R.id.button).setVisibility(View.GONE);
+
+    }
+
+    private void updateSeekbarValues() {
         seekbar.setBackgroundColor(Color.BLACK);
         seekbar.setProgressColor(Color.parseColor("#a5a5a5"));
         seekbar.setThumbColor(Color.parseColor("#f5f5f5"));
@@ -33,14 +50,5 @@ public class JavaSampleActivity extends AppCompatActivity {
         seekbar.setShowThumb(true);
         seekbar.setEnableTouch(true);
         seekbar.setProgress(20f);
-
-        Log.d(TAG, "onCreate: ${seekbar.getProgress()}");
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            seekbar.setAnimatedProgress(75f, 800L);
-        }, 800);
-
-        findViewById(R.id.button).setVisibility(View.GONE);
-
     }
 }
