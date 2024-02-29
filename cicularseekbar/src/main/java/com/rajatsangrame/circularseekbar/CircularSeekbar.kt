@@ -49,7 +49,7 @@ class CircularSeekbar @JvmOverloads constructor(
     /**
      * This is used in onTouchEvent to simulate the seekbar progress
      */
-    private var isThumbTouchEvent = false
+    private var isThumbPressed = false
 
     private var progress: Float = DEFAULT_PROGRESS
 
@@ -231,19 +231,19 @@ class CircularSeekbar @JvmOverloads constructor(
                 val y = event.y
                 val p = PointF(x, y)
                 if (isProgressBarRegion(p)) {
-                    isThumbTouchEvent = true
+                    isThumbPressed = true
                 }
                 return true
             }
 
             MotionEvent.ACTION_UP -> {
-                isThumbTouchEvent = false
+                isThumbPressed = false
                 return true
             }
 
             MotionEvent.ACTION_MOVE -> {
 
-                if (!isThumbTouchEvent) return true
+                if (!isThumbPressed) return true
 
                 val x = event.x
                 val y = event.y
