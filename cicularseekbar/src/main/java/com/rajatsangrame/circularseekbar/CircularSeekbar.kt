@@ -1,5 +1,6 @@
 package com.rajatsangrame.circularseekbar
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -126,8 +127,17 @@ class CircularSeekbar : View {
 
     fun getProgress() = progress
 
-    fun setAnimatedProgress(progress: Float) {
+    @JvmOverloads
+    fun setAnimatedProgress(progress: Float, duration: Long = 500L) {
 
+        val animator = ValueAnimator.ofFloat(this.progress, progress)
+        animator.duration = duration
+
+        animator.addUpdateListener { animation ->
+            this.progress = animation.animatedValue as Float
+            invalidate()
+        }
+        animator.start()
     }
 
 
