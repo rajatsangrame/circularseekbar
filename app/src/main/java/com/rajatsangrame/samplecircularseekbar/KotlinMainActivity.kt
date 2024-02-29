@@ -1,11 +1,13 @@
 package com.rajatsangrame.samplecircularseekbar
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Button
 import com.rajatsangrame.circularseekbar.CircularSeekbar
 
 class KotlinMainActivity : AppCompatActivity() {
@@ -13,6 +15,7 @@ class KotlinMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setTitle(TAG)
 
         val seekbar: CircularSeekbar = findViewById(R.id.circularseekbar)
         seekbar.setBackgroundColor(Color.BLACK)
@@ -32,9 +35,13 @@ class KotlinMainActivity : AppCompatActivity() {
 
 
         Log.d(TAG, "onCreate: ${seekbar.getProgress()}")
+
+        findViewById<Button>(R.id.button).setOnClickListener {
+            startActivity(Intent(this, JavaMainActivity::class.java))
+        }
     }
 
     companion object {
-        private const val TAG = "KotlinMainActivity"
+        private const val TAG = "KotlinSample"
     }
 }

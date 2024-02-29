@@ -12,17 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CircularProgressIndicator"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".KotlinMainActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
         <activity
-            android:name=".JavaMainActivity"
+            android:name=".KotlinMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".JavaMainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

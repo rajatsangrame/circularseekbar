@@ -33,7 +33,7 @@ class CircularSeekbar : View {
     private var thumbPadding = 4.dpToPx
     private var thickness = 20.dpToPx
     private var thumbRadius = 10.dpToPx
-    private var startAngle = StartAngle.TOP
+    private var startAngle: StartAngle = StartAngle.TOP
 
     private var showThumb = true
     private var updateProgressOnTouch = false
@@ -237,11 +237,11 @@ class CircularSeekbar : View {
         return super.onTouchEvent(event)
     }
 
-    enum class StartAngle(val value: Float) {
-        TOP(-90f),
-        LEFT(-180f),
-        BOTTOM(-270f),
-        RIGHT(0f),
+    sealed class StartAngle(val value: Float) {
+        data object TOP : StartAngle(-90f)
+        data object LEFT : StartAngle(-180f)
+        data object BOTTOM : StartAngle(-270f)
+        data object RIGHT : StartAngle(0f)
     }
 
     companion object {
