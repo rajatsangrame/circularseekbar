@@ -148,6 +148,8 @@ public class JavaSampleActivity extends AppCompatActivity {
             }
         }, 800);
 
+        findViewById(R.id.button).setVisibility(View.GONE);
+
     }
 
     private void updateSeekbarValues() {
