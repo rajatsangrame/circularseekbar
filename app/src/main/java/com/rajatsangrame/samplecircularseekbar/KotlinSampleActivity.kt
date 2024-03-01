@@ -44,14 +44,14 @@ class KotlinSampleActivity : AppCompatActivity() {
         thickness = findViewById(R.id.thickness)
         thumbRadius = findViewById(R.id.thumbradius)
         val progressListener = object : OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                when (seekBar) {
-                    thickness -> {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                when (seekBar.id) {
+                    R.id.thickness -> {
                         val value = (progress * 40) / 100
                         circularSeekbar.setThickness(value)
                     }
 
-                    thumbRadius -> {
+                    R.id.thumbradius -> {
                         val value = (progress * 20) / 100
                         circularSeekbar.setThumbRadius(value)
                     }
@@ -71,41 +71,45 @@ class KotlinSampleActivity : AppCompatActivity() {
         bgColor = findViewById(R.id.bgcolor)
         thumbColor = findViewById(R.id.thumbcolor)
 
+        val callback: AdapterView.OnItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    when (parent.id) {
+                        R.id.startangle -> {
+                            val angle = startAngles[position]
+                            circularSeekbar.setStartAngle(angle)
+                        }
 
-        val callback = { view: AdapterView<*>?, position: Int ->
-            when {
-                position == 0 -> Unit // Ignore
+                        R.id.bgcolor -> {
+                            val color = materialColors[position]
+                            circularSeekbar.setBackgroundColor(Color.parseColor(color))
+                        }
 
-                view == startAngle -> {
-                    val angle = startAngles[position]
-                    circularSeekbar.setStartAngle(angle)
+                        R.id.progresscolor -> {
+                            val color = materialColors[position]
+                            circularSeekbar.setProgressColor(Color.parseColor(color))
+                        }
+
+                        R.id.thumbcolor -> {
+                            val color = materialColors[position]
+                            circularSeekbar.setThumbColor(Color.parseColor(color))
+                        }
+                    }
                     circularSeekbar.invalidate()
                 }
 
-                view == progressColor -> {
-                    val color = materialColors[position]
-                    circularSeekbar.setProgressColor(Color.parseColor(color))
-                    circularSeekbar.invalidate()
-                }
-
-                view == bgColor -> {
-                    val color = materialColors[position]
-                    circularSeekbar.setBackgroundColor(Color.parseColor(color))
-                    circularSeekbar.invalidate()
-                }
-
-                view == thumbColor -> {
-                    val color = materialColors[position]
-                    circularSeekbar.setThumbColor(Color.parseColor(color))
-                    circularSeekbar.invalidate()
-                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-        }
-        startAngle.onProgressChange(callback)
-        progressColor.onProgressChange(callback)
-        bgColor.onProgressChange(callback)
-        thumbColor.onProgressChange(callback)
 
+        startAngle.onItemSelectedListener = callback
+        progressColor.onItemSelectedListener = callback
+        bgColor.onItemSelectedListener = callback
+        thumbColor.onItemSelectedListener = callback
 
         enableTouch = findViewById(R.id.enabletouch)
         showThumb = findViewById(R.id.showthumb)
@@ -171,21 +175,5 @@ class KotlinSampleActivity : AppCompatActivity() {
             "#485460",
             "#05c46b"
         )
-    }
-
-    private fun Spinner.onProgressChange(callback: (AdapterView<*>?, Int) -> Unit) {
-        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                callback(parent, position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
     }
 }

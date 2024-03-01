@@ -51,30 +51,24 @@ class CircularSeekbar @JvmOverloads constructor(
      * This is used in onTouchEvent to simulate the seekbar progress
      */
     private var isThumbPressed = false
-
     private var progress: Float = DEFAULT_PROGRESS
-
     private var thumbPadding = DEFAULT_THUMB_PADDING_DP.dpToPx
     private var thickness = DEFAULT_THICKNESS_DP.dpToPx
     private var thumbRadius = DEFAULT_THUMB_RADIUS_DP.dpToPx
     private var startAngle: StartAngle = StartAngle.TOP
-
     private var showThumb = DEFAULT_SHOW_THUMB
     private var enableTouch = DEFAULT_ENABLE_TOUCH
-
     private val thumbPaint = Paint().also {
         it.isAntiAlias = true
         it.style = Paint.Style.FILL_AND_STROKE
         it.color = DEFAULT_THUMB_COLOR
     }
-
     private val backgroundPaint = Paint().also {
         it.isAntiAlias = true
         it.style = Paint.Style.STROKE
         it.strokeWidth = this.thickness
         it.color = DEFAULT_BG_COLOR
     }
-
     private val progressPaint = Paint().also {
         it.isAntiAlias = true
         it.style = Paint.Style.STROKE
@@ -82,42 +76,11 @@ class CircularSeekbar @JvmOverloads constructor(
         it.color = DEFAULT_PROGRESS_COLOR
     }
 
-    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        super.setPadding(left, top, right, bottom)
-        if (left != top || left != bottom || left != right) {
-            Log.e(TAG, "setPadding: Padding should be same for all.")
-        }
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        center.x = width / 2f
-        center.y = height / 2f
-
-        outerRadius = min(center.x - paddingLeft, center.y - paddingRight)
-        innerRadius = outerRadius - thickness / 2
-
-        rectF.set(
-            (center.x - innerRadius),
-            (center.y - innerRadius),
-            (center.x + innerRadius),
-            (center.y + innerRadius)
-        )
-        val sweepAngle = (360 * progress) / 100
-        canvas.drawArc(rectF, startAngle.value, 360f, false, backgroundPaint)
-        canvas.drawArc(rectF, startAngle.value, sweepAngle, false, progressPaint)
-        if (showThumb) {
-            val sweepAngleRadians = Math.toRadians(startAngle.value + sweepAngle.toDouble())
-            val cx = rectF.centerX() + (rectF.width() / 2) * cos(sweepAngleRadians)
-            val cy = rectF.centerY() + (rectF.height() / 2) * sin(sweepAngleRadians)
-            canvas.drawCircle(cx.toFloat(), cy.toFloat(), thumbRadius, thumbPaint)
-        }
-    }
-
     fun setStartAngle(startAngle: StartAngle) {
         this.startAngle = startAngle
     }
+
+    fun getStartAngle() = startAngle
 
     fun setThickness(size: Int) {
         setThickness(size.dpToPx)
@@ -150,8 +113,6 @@ class CircularSeekbar @JvmOverloads constructor(
         invalidate()
     }
 
-    fun getProgress() = progress
-
     @JvmOverloads
     fun setAnimatedProgress(progress: Float, duration: Long = 500L) {
 
@@ -165,6 +126,8 @@ class CircularSeekbar @JvmOverloads constructor(
         }
         animator.start()
     }
+
+    fun getProgress() = progress
 
 
     override fun setBackgroundColor(@ColorInt color: Int) {
@@ -201,12 +164,45 @@ class CircularSeekbar @JvmOverloads constructor(
         this.thumbPadding = padding
     }
 
+    private fun getThumbPadding() = this.thumbPadding.pxToDp
+
     fun setShowThumb(boolean: Boolean) {
         this.showThumb = boolean
     }
 
+
+    fun getShowThumb() = showThumb
+
     fun setEnableTouch(boolean: Boolean) {
         this.enableTouch = boolean
+    }
+
+    fun getEnableTouch() = enableTouch
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        center.x = width / 2f
+        center.y = height / 2f
+
+        outerRadius = min(center.x - paddingLeft, center.y - paddingRight)
+        innerRadius = outerRadius - thickness / 2
+
+        rectF.set(
+            (center.x - innerRadius),
+            (center.y - innerRadius),
+            (center.x + innerRadius),
+            (center.y + innerRadius)
+        )
+        val sweepAngle = (360 * progress) / 100
+        canvas.drawArc(rectF, startAngle.value, 360f, false, backgroundPaint)
+        canvas.drawArc(rectF, startAngle.value, sweepAngle, false, progressPaint)
+        if (showThumb) {
+            val sweepAngleRadians = Math.toRadians(startAngle.value + sweepAngle.toDouble())
+            val cx = rectF.centerX() + (rectF.width() / 2) * cos(sweepAngleRadians)
+            val cy = rectF.centerY() + (rectF.height() / 2) * sin(sweepAngleRadians)
+            canvas.drawCircle(cx.toFloat(), cy.toFloat(), thumbRadius, thumbPaint)
+        }
     }
 
     /**
@@ -276,23 +272,15 @@ class CircularSeekbar @JvmOverloads constructor(
         return super.onTouchEvent(event)
     }
 
-    sealed class StartAngle(val value: Float) {
-        data object TOP : StartAngle(-90f)
-        data object LEFT : StartAngle(-180f)
-        data object RIGHT : StartAngle(0f)
-        data object BOTTOM : StartAngle(-270f)
-        companion object {
-            fun get(index: Int): StartAngle {
-                return when (index) {
-                    0 -> LEFT
-                    1 -> TOP
-                    2 -> RIGHT
-                    3 -> BOTTOM
-                    else -> throw IllegalArgumentException("Invalid value for StartAngle: $index")
-                }
-            }
+    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+        super.setPadding(left, top, right, bottom)
+        if (left != top || left != bottom || left != right) {
+            Log.e(TAG, "setPadding: Padding should be same for all.")
         }
     }
+
+    private val Int.dpToPx: Float get() = this * Resources.getSystem().displayMetrics.density
+    private val Float.pxToDp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
     init {
         attrs?.let {
@@ -350,6 +338,24 @@ class CircularSeekbar @JvmOverloads constructor(
         listener?.onProgressChanged(this, progress, false)
     }
 
+    sealed class StartAngle(val value: Float) {
+        data object TOP : StartAngle(-90f)
+        data object LEFT : StartAngle(-180f)
+        data object RIGHT : StartAngle(0f)
+        data object BOTTOM : StartAngle(-270f)
+        companion object {
+            fun get(index: Int): StartAngle {
+                return when (index) {
+                    0 -> LEFT
+                    1 -> TOP
+                    2 -> RIGHT
+                    3 -> BOTTOM
+                    else -> throw IllegalArgumentException("Invalid value for StartAngle: $index")
+                }
+            }
+        }
+    }
+
     interface OnProgressChangeListener {
         fun onProgressChanged(seekBar: CircularSeekbar, progress: Float, fromUser: Boolean)
 
@@ -357,7 +363,4 @@ class CircularSeekbar @JvmOverloads constructor(
 
         fun onStopTouchEvent(seekBar: CircularSeekbar)
     }
-
-    private val Int.dpToPx: Float get() = this * Resources.getSystem().displayMetrics.density
-    private val Float.pxToDp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 }
