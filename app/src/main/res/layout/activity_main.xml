@@ -52,6 +52,8 @@
         android:id="@+id/linearLayout"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="Thum Radius"
             android:textStyle="bold" />
 
@@ -84,64 +86,32 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/showthumb"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="BG Color"
-            android:textStyle="bold" />
+            android:checked="true"
+            android:text="Show Thumb " />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/bgcolor"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/enabletouch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:entries="@array/materialColors"
-            android:fadeScrollbars="false"
-            android:scrollbars="none" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="Progres Color"
-            android:textStyle="bold" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/progresscolor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:entries="@array/materialColors"
-            android:fadeScrollbars="false"
-            android:scrollbars="none" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="Thumb Color"
-            android:textStyle="bold" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/thumbcolor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:entries="@array/materialColors"
-            android:fadeScrollbars="false"
-            android:scrollbars="none" />
-
+            android:checked="true"
+            android:text="Enable Touch " />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout"
@@ -162,6 +132,60 @@
             android:entries="@array/startAngle"
             android:fadeScrollbars="false"
             android:scrollbars="none" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="BG Color"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/bgcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:entries="@array/materialColors"
+            android:fadeScrollbars="false"
+            android:scrollbars="none" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Progres Color"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/progresscolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:entries="@array/materialColors"
+            android:fadeScrollbars="false"
+            android:scrollbars="none" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Thumb Color"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/thumbcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:entries="@array/materialColors"
+            android:fadeScrollbars="false"
+            android:scrollbars="none" />
+
 
     </LinearLayout>
 

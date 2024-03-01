@@ -2,17 +2,19 @@ package com.rajatsangrame.samplecircularseekbar
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.CompoundButton
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.rajatsangrame.circularseekbar.CircularSeekbar
 import com.rajatsangrame.circularseekbar.Util.onProgressChanged
 
@@ -26,6 +28,8 @@ class KotlinSampleActivity : AppCompatActivity() {
     private lateinit var progressColor: Spinner
     private lateinit var bgColor: Spinner
     private lateinit var thumbColor: Spinner
+    private lateinit var enableTouch: SwitchMaterial
+    private lateinit var showThumb: SwitchMaterial
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +106,21 @@ class KotlinSampleActivity : AppCompatActivity() {
         bgColor.onProgressChange(callback)
         thumbColor.onProgressChange(callback)
 
+
+        enableTouch = findViewById(R.id.enabletouch)
+        showThumb = findViewById(R.id.showthumb)
+        val checkedChangeListener =
+            CompoundButton.OnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                if (buttonView.id == R.id.enabletouch) {
+                    circularSeekbar.setEnableTouch(isChecked)
+                } else if (buttonView.id == R.id.showthumb) {
+                    circularSeekbar.setShowThumb(isChecked)
+                }
+                circularSeekbar.invalidate()
+            }
+        enableTouch.setOnCheckedChangeListener(checkedChangeListener)
+        showThumb.setOnCheckedChangeListener(checkedChangeListener)
+
         // Comment this to override values defined in the xml
         updateSeekbarValues()
 
@@ -117,13 +136,14 @@ class KotlinSampleActivity : AppCompatActivity() {
     private fun updateSeekbarValues() {
         bgColor.setSelection(8)
         progressColor.setSelection(1)
-        thumbColor.setSelection(2)
+        thumbColor.setSelection(1)
         startAngle.setSelection(2)
 
-        thickness.progress = 30
-        thumbRadius.progress = 36
-        circularSeekbar.setShowThumb(true)
-        circularSeekbar.setEnableTouch(true)
+        thickness.progress = 100
+        thumbRadius.progress = 100
+
+        showThumb.isChecked = true
+        enableTouch.isChecked = true
     }
 
     companion object {

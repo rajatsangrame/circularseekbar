@@ -6,14 +6,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.rajatsangrame.circularseekbar.CircularSeekbar;
 
 public class JavaSampleActivity extends AppCompatActivity {
@@ -26,6 +29,8 @@ public class JavaSampleActivity extends AppCompatActivity {
     private Spinner progressColor;
     private Spinner bgColor;
     private Spinner thumbColor;
+    private SwitchMaterial enableTouch;
+    private SwitchMaterial showThumb;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,6 +123,21 @@ public class JavaSampleActivity extends AppCompatActivity {
         bgColor.setOnItemSelectedListener(callback);
         thumbColor.setOnItemSelectedListener(callback);
 
+
+        enableTouch = findViewById(R.id.enabletouch);
+        showThumb = findViewById(R.id.showthumb);
+        CompoundButton.OnCheckedChangeListener checkedChangeListener = (buttonView, isChecked) -> {
+            if (buttonView.getId() == R.id.enabletouch) {
+                circularSeekbar.setEnableTouch(isChecked);
+            } else if (buttonView.getId() == R.id.showthumb) {
+                circularSeekbar.setShowThumb(isChecked);
+            }
+            circularSeekbar.invalidate();
+        };
+        enableTouch.setOnCheckedChangeListener(checkedChangeListener);
+        showThumb.setOnCheckedChangeListener(checkedChangeListener);
+
+
         // Comment this to override values defined in the xml
         updateSeekbarValues();
 
@@ -133,12 +153,13 @@ public class JavaSampleActivity extends AppCompatActivity {
     private void updateSeekbarValues() {
         bgColor.setSelection(8);
         progressColor.setSelection(1);
-        thumbColor.setSelection(2);
+        thumbColor.setSelection(1);
         startAngle.setSelection(2);
 
-        thickness.setProgress(30);
-        thumbRadius.setProgress(36);
-        circularSeekbar.setShowThumb(true);
-        circularSeekbar.setEnableTouch(true);
+        thickness.setProgress(100);
+        thumbRadius.setProgress(100);
+
+        showThumb.setChecked(true);
+        enableTouch.setChecked(true);
     }
 }
