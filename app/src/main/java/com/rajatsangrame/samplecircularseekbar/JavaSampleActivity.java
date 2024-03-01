@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
