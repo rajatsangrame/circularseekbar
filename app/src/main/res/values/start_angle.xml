@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="startAngle">
+        <item>Select</item>
+        <item>Left</item>
+        <item>Top</item>
+        <item>Right</item>
+        <item>Bottom</item>
+    </string-array>
+</resources>

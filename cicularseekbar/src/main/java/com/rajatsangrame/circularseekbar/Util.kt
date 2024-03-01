@@ -1,7 +1,21 @@
 package com.rajatsangrame.circularseekbar
 
-import android.content.res.Resources
+object Util {
 
-internal object Util {
-    val Int.dpToPx: Float get() = (this * Resources.getSystem().displayMetrics.density)
+    fun CircularSeekbar.onProgressChanged(callback: (Float, Boolean) -> Unit) {
+        this.setProgressChangeListener(object : CircularSeekbar.OnProgressChangeListener {
+            override fun onProgressChanged(
+                seekBar: CircularSeekbar,
+                progress: Float,
+                fromUser: Boolean
+            ) {
+                callback(progress, fromUser)
+            }
+
+            override fun onStartTouchEvent(seekBar: CircularSeekbar) {}
+
+            override fun onStopTouchEvent(seekBar: CircularSeekbar) {}
+
+        })
+    }
 }

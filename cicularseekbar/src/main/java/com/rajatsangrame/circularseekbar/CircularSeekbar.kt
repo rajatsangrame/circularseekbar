@@ -2,6 +2,7 @@ package com.rajatsangrame.circularseekbar
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -13,7 +14,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import com.rajatsangrame.circularseekbar.Util.dpToPx
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
@@ -25,7 +25,8 @@ class CircularSeekbar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
+    private var listener: OnProgressChangeListener? = null
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     companion object {
@@ -128,12 +129,24 @@ class CircularSeekbar @JvmOverloads constructor(
         thickness = size
     }
 
-    fun setProgress(progress: Float) {
+    fun getThickness() = thickness.pxToDp
+
+    fun setProgressChangeListener(listener: OnProgressChangeListener) {
+        this.listener = listener
+    }
+
+    fun removeProgressChangeListener() {
+        this.listener = null
+    }
+
+    @JvmOverloads
+    fun setProgress(progress: Float, fromUser: Boolean = false) {
         val range = 1f..100f
         if (progress !in range) {
             throw IllegalArgumentException("$progress is out of range. It should lies between 1 ot  to 100")
         }
         this.progress = progress
+        listener?.onProgressChanged(this, progress, fromUser)
         invalidate()
     }
 
@@ -147,6 +160,7 @@ class CircularSeekbar @JvmOverloads constructor(
 
         animator.addUpdateListener { animation ->
             this.progress = animation.animatedValue as Float
+            listener?.onProgressChanged(this, this.progress, false)
             invalidate()
         }
         animator.start()
@@ -172,6 +186,8 @@ class CircularSeekbar @JvmOverloads constructor(
     private fun setThumbRadius(@Px radius: Float) {
         thumbRadius = radius
     }
+
+    fun getThumbRadius() = thumbRadius.pxToDp
 
     /**
      *  Adjust the thumb padding surface according. This can be useful if thumb radius
@@ -233,11 +249,13 @@ class CircularSeekbar @JvmOverloads constructor(
                 if (isProgressBarRegion(p)) {
                     isThumbPressed = true
                 }
+                listener?.onStartTouchEvent(this@CircularSeekbar)
                 return true
             }
 
             MotionEvent.ACTION_UP -> {
                 isThumbPressed = false
+                listener?.onStopTouchEvent(this@CircularSeekbar)
                 return true
             }
 
@@ -250,6 +268,7 @@ class CircularSeekbar @JvmOverloads constructor(
                 val p = PointF(x, y)
                 val angleDegrees = getSweepAngle(p)
                 progress = (angleDegrees * 100f) / 360f
+                listener?.onProgressChanged(this@CircularSeekbar, progress, true)
                 invalidate()
                 return true
             }
@@ -328,5 +347,17 @@ class CircularSeekbar @JvmOverloads constructor(
 
             array.recycle()
         }
+        listener?.onProgressChanged(this, progress, false)
     }
+
+    interface OnProgressChangeListener {
+        fun onProgressChanged(seekBar: CircularSeekbar, progress: Float, fromUser: Boolean)
+
+        fun onStartTouchEvent(seekBar: CircularSeekbar)
+
+        fun onStopTouchEvent(seekBar: CircularSeekbar)
+    }
+
+    private val Int.dpToPx: Float get() = this * Resources.getSystem().displayMetrics.density
+    private val Float.pxToDp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 }

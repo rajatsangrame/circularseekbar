@@ -4,9 +4,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,8 +19,13 @@ import com.rajatsangrame.circularseekbar.CircularSeekbar;
 public class JavaSampleActivity extends AppCompatActivity {
 
     private static final String TAG = "JavaSample";
-
-    private CircularSeekbar seekbar;
+    private CircularSeekbar circularSeekbar;
+    private SeekBar thickness;
+    private SeekBar thumbRadius;
+    private Spinner startAngle;
+    private Spinner progressColor;
+    private Spinner bgColor;
+    private Spinner thumbColor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,31 +33,112 @@ public class JavaSampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(TAG);
 
-        seekbar = findViewById(R.id.circularseekbar);
+        circularSeekbar = findViewById(R.id.circularseekbar);
+        circularSeekbar.setProgressChangeListener(new CircularSeekbar.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(@NonNull CircularSeekbar seekBar, float progress, boolean fromUser) {
+                final TextView tv = findViewById(R.id.tvprogress);
+                tv.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTouchEvent(@NonNull CircularSeekbar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTouchEvent(@NonNull CircularSeekbar seekBar) {
+
+            }
+        });
+
+        thickness = findViewById(R.id.thickness);
+        thumbRadius = findViewById(R.id.thumbradius);
+        final SeekBar.OnSeekBarChangeListener progressListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (seekBar.getId() == R.id.thickness) {
+                    int value = (progress * 40) / 100;
+                    circularSeekbar.setThickness(value);
+                } else if (seekBar.getId() == R.id.thumbradius) {
+                    int radius = (progress * 20) / 100;
+                    circularSeekbar.setThumbRadius(radius);
+                }
+                circularSeekbar.invalidate();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        };
+        thickness.setOnSeekBarChangeListener(progressListener);
+        thumbRadius.setOnSeekBarChangeListener(progressListener);
+
+        startAngle = findViewById(R.id.startangle);
+        progressColor = findViewById(R.id.progresscolor);
+        bgColor = findViewById(R.id.bgcolor);
+        thumbColor = findViewById(R.id.thumbcolor);
+
+        final AdapterView.OnItemSelectedListener callback = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getId() == R.id.startangle) {
+                    CircularSeekbar.StartAngle angle = KotlinSampleActivity.getStartAngles().get(position);
+                    circularSeekbar.setStartAngle(angle);
+                } else if (parent.getId() == R.id.bgcolor) {
+                    String color = KotlinSampleActivity.getMaterialColors().get(position);
+                    circularSeekbar.setBackgroundColor(Color.parseColor(color));
+
+                } else if (parent.getId() == R.id.progresscolor) {
+                    String color = KotlinSampleActivity.getMaterialColors().get(position);
+                    circularSeekbar.setProgressColor(Color.parseColor(color));
+
+                } else if (parent.getId() == R.id.thumbcolor) {
+                    String color = KotlinSampleActivity.getMaterialColors().get(position);
+                    circularSeekbar.setThumbColor(Color.parseColor(color));
+                }
+                circularSeekbar.invalidate();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+        startAngle.setOnItemSelectedListener(callback);
+        progressColor.setOnItemSelectedListener(callback);
+        bgColor.setOnItemSelectedListener(callback);
+        thumbColor.setOnItemSelectedListener(callback);
 
         // Comment this to override values defined in the xml
-        // updateSeekbarValues()
+        updateSeekbarValues();
 
-        Log.d(TAG, "onCreate: ${seekbar.getProgress()}");
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            seekbar.setAnimatedProgress(75f, 800L);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                circularSeekbar.setAnimatedProgress(75f, 600L);
+            }
         }, 800);
-
-        findViewById(R.id.button).setVisibility(View.GONE);
 
     }
 
     private void updateSeekbarValues() {
-        seekbar.setBackgroundColor(Color.BLACK);
-        seekbar.setProgressColor(Color.parseColor("#a5a5a5"));
-        seekbar.setThumbColor(Color.parseColor("#f5f5f5"));
-        seekbar.setStartAngle(CircularSeekbar.StartAngle.TOP.INSTANCE);
-        seekbar.setThickness(24);
-        seekbar.setThumbRadius(16);
-        seekbar.setThumbPadding(8);
-        seekbar.setShowThumb(true);
-        seekbar.setEnableTouch(true);
-        seekbar.setProgress(20f);
+        bgColor.setSelection(8);
+        progressColor.setSelection(1);
+        thumbColor.setSelection(2);
+        startAngle.setSelection(2);
+
+        thickness.setProgress(30);
+        thumbRadius.setProgress(36);
+        circularSeekbar.setShowThumb(true);
+        circularSeekbar.setEnableTouch(true);
     }
 }

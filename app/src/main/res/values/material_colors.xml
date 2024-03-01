@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="materialColors">
+        <item>Select</item>
+        <item>Sunflower</item>
+        <item>Bara Red</item>
+        <item>Some Blue</item>
+        <item>Chrome Yellow</item>
+        <item>Android Green</item>
+        <item>Some Purple</item>
+        <item>Pigment Red</item>
+        <item>Good Night</item>
+        <item>Green Teal</item>
+    </string-array>
+</resources>
+
+
