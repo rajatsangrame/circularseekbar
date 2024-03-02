@@ -1,7 +1,7 @@
 # circularseekbar
 [![Release](https://jitpack.io/v/rajatsangrame/ImagesSubRedditViewer.svg)](https://jitpack.io/#rajatsangrame/ImagesSubRedditViewer)
 
-<img src="demo.gif" width="600">
+<img src="demo.gif" width="40%">
 
 ## Features
 * Set progress with animation.
