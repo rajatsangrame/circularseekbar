@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.util.AttributeSet
-import android.view.MotionEvent
 
 class RainbowSeekbar @JvmOverloads constructor(
     context: Context,
@@ -18,14 +17,6 @@ class RainbowSeekbar @JvmOverloads constructor(
     }
 
     override fun getSweepAngle(p: PointF): Float {
-        TODO("Not yet implemented")
-    }
-
-    override fun processTouchEvent(event: MotionEvent): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPreDraw(canvas: Canvas) {
         TODO("Not yet implemented")
     }
 }

@@ -29,7 +29,7 @@ class CircularSeekbar @JvmOverloads constructor(
     fun getStartAngle() = startAngle
 
 
-    override fun onPreDraw(canvas: Canvas) {
+    override fun onDraw(canvas: Canvas) {
         center.x = width / 2f
         center.y = height / 2f
 
@@ -90,7 +90,7 @@ class CircularSeekbar @JvmOverloads constructor(
         }
     }
 
-    override fun processTouchEvent(event: MotionEvent): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         if (!enableTouch) return false
 
         when (event.action) {
