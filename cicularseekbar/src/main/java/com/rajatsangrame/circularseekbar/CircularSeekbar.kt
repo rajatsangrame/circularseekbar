@@ -29,9 +29,7 @@ class CircularSeekbar @JvmOverloads constructor(
     fun getStartAngle() = startAngle
 
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
+    override fun onPreDraw(canvas: Canvas) {
         center.x = width / 2f
         center.y = height / 2f
 
@@ -58,7 +56,6 @@ class CircularSeekbar @JvmOverloads constructor(
 
     /**
      * Check the distance of point xy from the center of the circle
-     * when the (0,0) is top left corner of the plane
      */
     override fun isProgressBarRegion(p: PointF): Boolean {
         val distance = sqrt((p.x - center.x).pow(2) + (p.y - center.y).pow(2))
@@ -93,8 +90,7 @@ class CircularSeekbar @JvmOverloads constructor(
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
+    override fun processTouchEvent(event: MotionEvent): Boolean {
         if (!enableTouch) return false
 
         when (event.action) {
@@ -107,13 +103,11 @@ class CircularSeekbar @JvmOverloads constructor(
                     isThumbPressed = true
                 }
                 listener?.onStartTouchEvent(this@CircularSeekbar)
-                return true
             }
 
             MotionEvent.ACTION_UP -> {
                 isThumbPressed = false
                 listener?.onStopTouchEvent(this@CircularSeekbar)
-                return true
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -127,9 +121,8 @@ class CircularSeekbar @JvmOverloads constructor(
                 progress = (angleDegrees * 100f) / 360f
                 listener?.onProgressChanged(this@CircularSeekbar, progress, true)
                 invalidate()
-                return true
             }
         }
-        return super.onTouchEvent(event)
+        return true
     }
 }

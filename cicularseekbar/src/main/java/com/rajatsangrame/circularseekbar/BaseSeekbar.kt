@@ -2,13 +2,14 @@ package com.rajatsangrame.circularseekbar
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.content.res.Resources
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
@@ -157,6 +158,16 @@ abstract class BaseSeekbar(
         this.showThumb = boolean
     }
 
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return processTouchEvent(event)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        onPreDraw(canvas)
+
+    }
+
 
     fun getShowThumb() = showThumb
 
@@ -169,6 +180,10 @@ abstract class BaseSeekbar(
     protected abstract fun isProgressBarRegion(p: PointF): Boolean
 
     protected abstract fun getSweepAngle(p: PointF): Float
+
+    protected abstract fun processTouchEvent(event: MotionEvent): Boolean
+
+    protected abstract fun onPreDraw(canvas: Canvas)
 
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         super.setPadding(left, top, right, bottom)
