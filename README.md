@@ -1,6 +1,8 @@
 # circularseekbar
 [![Release](https://jitpack.io/v/rajatsangrame/ImagesSubRedditViewer.svg)](https://jitpack.io/#rajatsangrame/ImagesSubRedditViewer)
 
+<img src="demo.gif" width="600">
+
 ## Features
 * Set progress with animation.
 * Seek the progress by touch events.
@@ -266,7 +268,7 @@ We recommend to use equal padding for the `CircularSeekbar` else touch event mig
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright [2024] [Rajat Sangrame]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
