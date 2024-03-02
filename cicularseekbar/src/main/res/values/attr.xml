@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CircularSeekbar">
+    <declare-styleable name="BaseSeekbar">
 
         <attr name="progressColor" format="color" />
         <attr name="backgroundColor" format="color" />
@@ -14,13 +14,15 @@
         <attr name="showThumb" format="boolean" />
         <attr name="enableTouch" format="boolean" />
 
+        <attr name="progress" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="CircularSeekbar">
         <attr name="startAngle" format="enum">
             <enum name="left" value="0" />
             <enum name="top" value="1" />
             <enum name="right" value="2" />
             <enum name="bottom" value="3" />
         </attr>
-
-        <attr name="progress" format="float" />
     </declare-styleable>
 </resources>

@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.rajatsangrame.circularseekbar.CircularSeekbar
+import com.rajatsangrame.circularseekbar.StartAngle
 import com.rajatsangrame.circularseekbar.Util.onProgressChanged
 
 class KotlinSampleActivity : AppCompatActivity() {
@@ -155,11 +156,11 @@ class KotlinSampleActivity : AppCompatActivity() {
 
         @JvmStatic
         val startAngles = listOf(
-            CircularSeekbar.StartAngle.TOP, // Ignore 0 index
-            CircularSeekbar.StartAngle.LEFT,
-            CircularSeekbar.StartAngle.TOP,
-            CircularSeekbar.StartAngle.RIGHT,
-            CircularSeekbar.StartAngle.BOTTOM,
+            StartAngle.TOP, // Ignore 0 index
+            StartAngle.LEFT,
+            StartAngle.TOP,
+            StartAngle.RIGHT,
+            StartAngle.BOTTOM,
         )
 
         @JvmStatic

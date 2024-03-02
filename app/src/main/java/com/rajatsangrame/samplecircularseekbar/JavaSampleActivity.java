@@ -16,7 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.rajatsangrame.circularseekbar.BaseSeekbar;
 import com.rajatsangrame.circularseekbar.CircularSeekbar;
+import com.rajatsangrame.circularseekbar.OnProgressChangeListener;
+import com.rajatsangrame.circularseekbar.StartAngle;
 
 public class JavaSampleActivity extends AppCompatActivity {
 
@@ -38,20 +41,20 @@ public class JavaSampleActivity extends AppCompatActivity {
         setTitle(TAG);
 
         circularSeekbar = findViewById(R.id.circularseekbar);
-        circularSeekbar.setProgressChangeListener(new CircularSeekbar.OnProgressChangeListener() {
+        circularSeekbar.setProgressChangeListener(new OnProgressChangeListener() {
             @Override
-            public void onProgressChanged(@NonNull CircularSeekbar seekBar, float progress, boolean fromUser) {
+            public void onProgressChanged(@NonNull BaseSeekbar seekBar, float progress, boolean fromUser) {
                 final TextView tv = findViewById(R.id.tvprogress);
                 tv.setText(String.valueOf(progress));
             }
 
             @Override
-            public void onStartTouchEvent(@NonNull CircularSeekbar seekBar) {
+            public void onStartTouchEvent(@NonNull BaseSeekbar seekBar) {
 
             }
 
             @Override
-            public void onStopTouchEvent(@NonNull CircularSeekbar seekBar) {
+            public void onStopTouchEvent(@NonNull BaseSeekbar seekBar) {
 
             }
         });
@@ -93,7 +96,7 @@ public class JavaSampleActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getId() == R.id.startangle) {
-                    CircularSeekbar.StartAngle angle = KotlinSampleActivity.getStartAngles().get(position);
+                    StartAngle angle = KotlinSampleActivity.getStartAngles().get(position);
                     circularSeekbar.setStartAngle(angle);
                 } else if (parent.getId() == R.id.bgcolor) {
                     String color = KotlinSampleActivity.getMaterialColors().get(position);

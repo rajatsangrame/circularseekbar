@@ -1,25 +1,21 @@
 package com.rajatsangrame.circularseekbar
 
 import android.content.Context
+import android.graphics.PointF
 import android.util.AttributeSet
-import android.view.View
 
-// TODO
-class RainbowSeekbar : View {
+class RainbowSeekbar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0,
+    listener: OnProgressChangeListener? = null
+) : BaseSeekbar(context, attrs, defStyleAttr, defStyleRes, listener) {
+    override fun isProgressBarRegion(p: PointF): Boolean {
+        TODO("Not yet implemented")
+    }
 
-
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    )
-
-    constructor(
-        context: Context?,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes)
+    override fun getSweepAngle(p: PointF): Float {
+        TODO("Not yet implemented")
+    }
 }
