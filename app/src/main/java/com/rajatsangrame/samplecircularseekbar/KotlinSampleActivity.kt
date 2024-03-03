@@ -13,9 +13,11 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.rajatsangrame.circularseekbar.BaseSeekbar
+import com.rajatsangrame.circularseekbar.CircularSeekbar
 import com.rajatsangrame.circularseekbar.RainbowSeekbar
 import com.rajatsangrame.circularseekbar.StartAngle
 import com.rajatsangrame.circularseekbar.Util.onProgressChanged
@@ -25,26 +27,27 @@ class KotlinSampleActivity : AppCompatActivity() {
     private lateinit var seekbar: BaseSeekbar
     private lateinit var thickness: SeekBar
     private lateinit var thumbRadius: SeekBar
+    private lateinit var sweepAngle: SeekBar
 
     private lateinit var startAngle: Spinner
     private lateinit var progressColor: Spinner
     private lateinit var bgColor: Spinner
     private lateinit var thumbColor: Spinner
+    private lateinit var selectseekbar: Spinner
+
     private lateinit var enableTouch: SwitchMaterial
     private lateinit var showThumb: SwitchMaterial
+
+    private var firstRun = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         title = TAG
 
-        seekbar = findViewById(R.id.circularseekbar)
-        seekbar.onProgressChanged { progress, _ ->
-            findViewById<TextView>(R.id.tvprogress).text = "$progress"
-        }
-
         thickness = findViewById(R.id.thickness)
         thumbRadius = findViewById(R.id.thumbradius)
+        sweepAngle = findViewById(R.id.sweepangle)
         val progressListener = object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 when (seekBar.id) {
@@ -57,6 +60,19 @@ class KotlinSampleActivity : AppCompatActivity() {
                         val value = (progress * 20) / 100
                         seekbar.setThumbRadius(value)
                     }
+
+                    R.id.sweepangle -> {
+                        val value = progress * 360 / 100
+                        if (seekbar is RainbowSeekbar) {
+                            (seekbar as RainbowSeekbar).setSweepAngle(value.toFloat())
+                        } else {
+                            Toast.makeText(
+                                this@KotlinSampleActivity,
+                                "Swipe Angle not Supported",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
                 seekbar.invalidate()
             }
@@ -67,11 +83,13 @@ class KotlinSampleActivity : AppCompatActivity() {
         }
         thickness.setOnSeekBarChangeListener(progressListener)
         thumbRadius.setOnSeekBarChangeListener(progressListener)
+        sweepAngle.setOnSeekBarChangeListener(progressListener)
 
         startAngle = findViewById(R.id.startangle)
         progressColor = findViewById(R.id.progresscolor)
         bgColor = findViewById(R.id.bgcolor)
         thumbColor = findViewById(R.id.thumbcolor)
+        selectseekbar = findViewById(R.id.selectseekbar)
 
         val callback: AdapterView.OnItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -82,9 +100,27 @@ class KotlinSampleActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     when (parent.id) {
+                        R.id.selectseekbar -> {
+                            if (!firstRun) {
+                                getIntent().putExtra("seekbar", position)
+                                finish()
+                                startActivity(getIntent())
+                            }
+                            firstRun = false
+                        }
+
                         R.id.startangle -> {
                             val angle = startAngles[position]
-                            //circularSeekbar.setStartAngle(angle)
+                            if (seekbar is CircularSeekbar) {
+                                (seekbar as CircularSeekbar).setStartAngle(angle)
+                            } else {
+                                Toast.makeText(
+                                    this@KotlinSampleActivity,
+                                    "Start Angle is not Supported",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
                         }
 
                         R.id.bgcolor -> {
@@ -112,6 +148,7 @@ class KotlinSampleActivity : AppCompatActivity() {
         progressColor.onItemSelectedListener = callback
         bgColor.onItemSelectedListener = callback
         thumbColor.onItemSelectedListener = callback
+        selectseekbar.onItemSelectedListener = callback
 
         enableTouch = findViewById(R.id.enabletouch)
         showThumb = findViewById(R.id.showthumb)
@@ -128,10 +165,10 @@ class KotlinSampleActivity : AppCompatActivity() {
         showThumb.setOnCheckedChangeListener(checkedChangeListener)
 
         // Comment this to override values defined in the xml
-        updateSeekbarValues()
+        loadSeekBar()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            seekbar.setAnimatedProgress(25f, 600L)
+            seekbar.setAnimatedProgress(70f, 600L)
         }, 800)
 
         findViewById<Button>(R.id.button).setOnClickListener {
@@ -139,7 +176,24 @@ class KotlinSampleActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateSeekbarValues() {
+    private fun loadSeekBar() {
+        val pos = getIntent().getIntExtra("seekbar", 0)
+        seekbar = if (pos == 0) {
+            findViewById<CircularSeekbar>(R.id.circularseekbar).visibility = View.GONE
+            val view = findViewById<RainbowSeekbar>(R.id.rainbowskeebar)
+            view.visibility = View.VISIBLE
+            view
+        } else {
+            findViewById<RainbowSeekbar>(R.id.rainbowskeebar).visibility = View.GONE
+            val view = findViewById<CircularSeekbar>(R.id.circularseekbar)
+            view.visibility = View.VISIBLE
+            view
+        }
+        seekbar.onProgressChanged { progress, _ ->
+            findViewById<TextView>(R.id.tvprogress).text = "$progress"
+        }
+        selectseekbar.setSelection(pos)
+
         bgColor.setSelection(8)
         progressColor.setSelection(1)
         thumbColor.setSelection(1)
@@ -147,10 +201,10 @@ class KotlinSampleActivity : AppCompatActivity() {
 
         thickness.progress = 100
         thumbRadius.progress = 100
+        sweepAngle.progress = 75
 
-        showThumb.isChecked = false
+        showThumb.isChecked = true
         enableTouch.isChecked = true
-        (seekbar as? RainbowSeekbar)?.setSweepAngle(270f)
     }
 
     companion object {
