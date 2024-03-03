@@ -102,9 +102,9 @@ class KotlinSampleActivity : AppCompatActivity() {
                     when (parent.id) {
                         R.id.selectseekbar -> {
                             if (!firstRun) {
-                                getIntent().putExtra("seekbar", position)
+                                intent.putExtra("seekbar", position)
                                 finish()
-                                startActivity(getIntent())
+                                startActivity(intent)
                             }
                             firstRun = false
                         }
@@ -124,18 +124,37 @@ class KotlinSampleActivity : AppCompatActivity() {
                         }
 
                         R.id.bgcolor -> {
-                            val color = materialColors[position]
-                            seekbar.setBackgroundColor(Color.parseColor(color))
+                            if (position == 10) {
+                                updateGradient(seekbar::setBackgroundGradient)
+                            } else if (position == 11) {
+                                seekbar.removeBackgroundGradient()
+                            } else {
+                                val color = materialColors[position]
+                                seekbar.setBackgroundColor(Color.parseColor(color))
+                            }
                         }
 
                         R.id.progresscolor -> {
-                            val color = materialColors[position]
-                            seekbar.setProgressColor(Color.parseColor(color))
+                            if (position == 10) {
+                                updateGradient(seekbar::setProgressGradient)
+                            } else if (position == 11) {
+                                seekbar.removeProgressGradient()
+                            } else {
+                                val color = materialColors[position]
+                                seekbar.setProgressColor(Color.parseColor(color))
+                            }
                         }
 
                         R.id.thumbcolor -> {
-                            val color = materialColors[position]
-                            seekbar.setThumbColor(Color.parseColor(color))
+
+                            if (position == 10) {
+                                updateGradient(seekbar::setThumbGradient)
+                            } else if (position == 11) {
+                                seekbar.removeThumbGradient()
+                            } else {
+                                val color = materialColors[position]
+                                seekbar.setThumbColor(Color.parseColor(color))
+                            }
                         }
                     }
                     seekbar.invalidate()
@@ -177,7 +196,7 @@ class KotlinSampleActivity : AppCompatActivity() {
     }
 
     private fun loadSeekBar() {
-        val pos = getIntent().getIntExtra("seekbar", 0)
+        val pos = intent.getIntExtra("seekbar", 0)
         seekbar = if (pos == 0) {
             findViewById<CircularSeekbar>(R.id.circularseekbar).visibility = View.GONE
             val view = findViewById<RainbowSeekbar>(R.id.rainbowskeebar)
@@ -195,8 +214,8 @@ class KotlinSampleActivity : AppCompatActivity() {
         selectseekbar.setSelection(pos)
 
         bgColor.setSelection(8)
-        progressColor.setSelection(1)
-        thumbColor.setSelection(1)
+        progressColor.setSelection(10)
+        thumbColor.setSelection(10)
         startAngle.setSelection(2)
 
         thickness.progress = 100
@@ -205,7 +224,10 @@ class KotlinSampleActivity : AppCompatActivity() {
 
         showThumb.isChecked = true
         enableTouch.isChecked = true
-        seekbar.setProgressColor(
+    }
+
+    private fun updateGradient(fn: (IntArray, FloatArray) -> Unit) {
+        fn(
             intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
             floatArrayOf(0f, 0.333f, 0.667f, 1f)
         )
@@ -234,7 +256,9 @@ class KotlinSampleActivity : AppCompatActivity() {
             "#9980FA",
             "#EA2027",
             "#485460",
-            "#05c46b"
+            "#05c46b",
+            "Gradient",
+            "RemoveGradient",
         )
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="materialColors">
+    <string-array name="seekbarColors">
         <item>Select</item>
         <item>Sunflower</item>
         <item>Bara Red</item>
@@ -11,6 +11,8 @@
         <item>Pigment Red</item>
         <item>Good Night</item>
         <item>Green Teal</item>
+        <item>Gradient</item>
+        <item>RemoveGradient</item>
     </string-array>
     <string-array name="seekbarSelect">
         <item>Rainbow</item>

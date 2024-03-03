@@ -122,15 +122,11 @@ abstract class BaseSeekbar(
         backgroundPaint.color = color
     }
 
-    fun setProgressColor(@ColorInt color: Int) {
-        progressPaint.color = color
-    }
-
     /**
-     * It uses [SweepGradient] with color gradients as progress color.
+     * It created [SweepGradient] using color gradients as background color.
      *  Example,
      *
-     *      seekbar.setProgressColor(
+     *      seekbar.setBackgroundGradient(
      *          intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
      *          floatArrayOf(0f, 0.333f, 0.667f, 1f)
      *      )
@@ -140,9 +136,40 @@ abstract class BaseSeekbar(
      * beginning with 0 and ending with 1.0.
      * If positions is NULL, then the colors are automatically spaced evenly.
      */
-    fun setProgressColor(colors: IntArray, positions: FloatArray?) {
+    fun setBackgroundGradient(colors: IntArray, positions: FloatArray?) {
+        val shader: Shader = SweepGradient(0f, 0f, colors, positions)
+        backgroundPaint.setShader(shader)
+    }
+
+    fun removeBackgroundGradient() {
+        backgroundPaint.setShader(null)
+    }
+
+    fun setProgressColor(@ColorInt color: Int) {
+        progressPaint.color = color
+    }
+
+    /**
+     * It created [SweepGradient] using color gradients as progress color.
+     *  Example,
+     *
+     *      seekbar.setProgressGradient(
+     *          intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
+     *          floatArrayOf(0f, 0.333f, 0.667f, 1f)
+     *      )
+     *
+     * @param colors An array of [ColorInt]. There must be at least 2 colors in the array.
+     * @param positions The relative position of each corresponding color in the colors array,
+     * beginning with 0 and ending with 1.0.
+     * If positions is NULL, then the colors are automatically spaced evenly.
+     */
+    fun setProgressGradient(colors: IntArray, positions: FloatArray?) {
         val shader: Shader = SweepGradient(0f, 0f, colors, positions)
         progressPaint.setShader(shader)
+    }
+
+    fun removeProgressGradient() {
+        progressPaint.setShader(null)
     }
 
     fun setThumbColor(@ColorInt color: Int) {
@@ -150,10 +177,10 @@ abstract class BaseSeekbar(
     }
 
     /**
-     * It uses [SweepGradient] with color gradients as thumb color.
+     * It created [SweepGradient] using color gradients as thumb color.
      *  Example,
      *
-     *      seekbar.setThumbColor(
+     *      seekbar.setThumbGradient(
      *          intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
      *          floatArrayOf(0f, 0.333f, 0.667f, 1f)
      *      )
@@ -163,9 +190,13 @@ abstract class BaseSeekbar(
      * beginning with 0 and ending with 1.0.
      * If positions is NULL, then the colors are automatically spaced evenly.
      */
-    fun setThumbColor(colors: IntArray, positions: FloatArray?) {
+    fun setThumbGradient(colors: IntArray, positions: FloatArray?) {
         val shader: Shader = SweepGradient(0f, 0f, colors, positions)
         thumbPaint.setShader(shader)
+    }
+
+    fun removeThumbGradient() {
+        thumbPaint.setShader(null)
     }
 
     fun setThumbRadius(radius: Int) {
