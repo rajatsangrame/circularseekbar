@@ -94,7 +94,7 @@ abstract class BaseSeekbar(
     fun setProgress(progress: Float, fromUser: Boolean = false) {
         val range = 1f..100f
         if (progress !in range) {
-            throw IllegalArgumentException("$progress is out of range. It should lies between 1 ot  to 100")
+            throw IllegalArgumentException("$progress is out of range. It should lies between 1 to 100")
         }
         this.progress = progress
         listener?.onProgressChanged(this, progress, fromUser)

@@ -23,10 +23,14 @@ class RainbowSeekbar @JvmOverloads constructor(
     private var sweepAngle = DEFAULT_SWEEP_ANGLE
 
     fun setSweepAngle(sweepAngle: Float) {
+        val range = 1f..360f
+        if (sweepAngle !in range) {
+            throw IllegalArgumentException("$sweepAngle is out of range. It should lies between 1 to 360")
+        }
         this.sweepAngle = sweepAngle
     }
 
-    private fun getSweepAngle(sweepAngle: Float) = sweepAngle
+    private fun getSweepAngle() = sweepAngle
 
     override fun isProgressBarRegion(p: PointF): Boolean {
         val distance = sqrt((p.x - center.x).pow(2) + (p.y - center.y).pow(2))

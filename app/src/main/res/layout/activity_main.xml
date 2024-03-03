@@ -44,7 +44,6 @@
             app:progress="22"
             app:progressColor="#03a9f4"
             app:showThumb="true"
-            app:startAngle="top"
             app:sweepAngle="200"
             app:thickness="20dp"
             app:thumbColor="#ff5722"
