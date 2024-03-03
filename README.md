@@ -5,10 +5,10 @@
 <img src="seekbar.gif" width="40%">
 
 Similar to the android Seekbar, Circular Seekbar is created to seek the progress in circular shape.
-This lib contains two seekbars. One is simple `CircularSeekbar` and other is `RainbowSeekbar`.
-Both provides feature like gradients, colors, animated progress etc but the major difference in 
+This library contains two seekbars. One is simple `CircularSeekbar` and other is `RainbowSeekbar`.
+Both provides feature like gradients, colors, animated progress etc but the major difference is, 
 `RainbowSeekbar` currently doesn't support rotation and focused on sweep angle in fixed position 
-(start position is bottom) and `CircularSeebar` supports rotation.
+(start position is bottom) and `CircularSeekbar` supports rotation.
 
 Below are some of the key features provided by Circular Seekbar 
 
@@ -58,7 +58,7 @@ properties in xml declaration. Check the below example for the reference.
     app:thumbRadius="16dp" />
 
 
-    <com.rajatsangrame.circularseekbar.RainbowSeekbar
+<com.rajatsangrame.circularseekbar.RainbowSeekbar
     ...
     app:sweepAngle="270"
 
