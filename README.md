@@ -4,13 +4,21 @@
 
 <img src="seekbar.gif" width="40%">
 
+Similar to the android Seekbar, Circular Seekbar is created to seek the progress in circular shape.
+This lib contains two seekbars. One is simple `CircularSeekbar` and other is `RainbowSeekbar`.
+Both provides feature like gradients, colors, animated progress etc but the major difference in 
+`RainbowSeekbar` currently doesn't support rotation and focused on sweep angle in fixed position 
+(start position is bottom) and `CircularSeebar` supports rotation.
+
+Below are some of the key features provided by Circular Seekbar 
+
 ## Features
 
-* Set progress with animation.
-* Seek the progress by touch events.
-* Modify the start angle of seekbar by 0, 90, 180 and 270 degrees.
-* Option to change the color of seekbar elements
-* Option to change the thickness of seekbar and thumb-radius.
+* Set progress accurately with animation as well as with touch events.
+* Apply gradients and colors to seekbar elements.
+* Change the sweep angle of seekbar between 0 to 360 degrees.
+* Rotation (Moving start angle of seekbar by 0, 90, 180 and 270 degrees).
+* Option to change its thickness, thumb-radius, enable/disable touch event, thumb visibility etc.
 
 Clone this repository play with the sample app to know more.
 
@@ -36,13 +44,24 @@ properties in xml declaration. Check the below example for the reference.
 
 ```xml
 
-<com.rajatsangrame.circularseekbar.CircularSeekbar android:id="@+id/circularSeekbar"
-    android:layout_width="250dp" android:layout_height="250dp" android:layout_marginTop="32dp"
-    android:padding="24dp" app:backgroundColor="#9e9e9e" app:enableTouch="true"
-    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" app:progress="22" app:progressColor="#03a9f4"
-    app:showThumb="true" app:startAngle="top" app:thickness="20dp" app:thumbColor="#ff5722"
-    app:thumbPadding="4dp" app:thumbRadius="16dp" />
+<com.rajatsangrame.circularseekbar.CircularSeekbar
+    ...   
+    app:backgroundColor="#9e9e9e" 
+    app:enableTouch="true"
+    app:progress="22" 
+    app:progressColor="#03a9f4"
+    app:showThumb="true"
+    app:startAngle="top" 
+    app:thickness="20dp" 
+    app:thumbColor="#ff5722"
+    app:thumbPadding="4dp" 
+    app:thumbRadius="16dp" />
+
+
+    <com.rajatsangrame.circularseekbar.RainbowSeekbar
+    ...
+    app:sweepAngle="270"
+
 ```
 
 Defining the `CircularSeekbar` on runtime will work similar like any other views.
@@ -50,20 +69,20 @@ Check the below example for the reference.
 
 ```kotlin
     val circularSeekbar = CircularSeekbar(this)
-circularSeekbar.setThickness(value)
-circularSeekbar.setThumbRadius(value)
-circularSeekbar.setStartAngle(StartAngle.TOP)
-circularSeekbar.setBackgroundColor(Color.parseColor(color))
-circularSeekbar.setProgressColor(Color.parseColor(color))
-circularSeekbar.setThumbColor(Color.parseColor(color))
-circularSeekbar.setEnableTouch(isChecked)
-circularSeekbar.setShowThumb(isChecked)
-
-circularSeekbar.setAnimatedProgress(progress = 75f, duration = 600L)
-
-circularSeekbar.onProgressChanged { progress, _ ->
-    findViewById<TextView>(R.id.tvprogress).text = "$progress"
-}
+    circularSeekbar.setThickness(value)
+    circularSeekbar.setThumbRadius(value)
+    circularSeekbar.setStartAngle(StartAngle.TOP)
+    circularSeekbar.setBackgroundColor(Color.parseColor(color))
+    circularSeekbar.setProgressColor(Color.parseColor(color))
+    circularSeekbar.setThumbColor(Color.parseColor(color))
+    circularSeekbar.setEnableTouch(isChecked)
+    circularSeekbar.setShowThumb(isChecked)
+    
+    circularSeekbar.setAnimatedProgress(progress = 75f, duration = 600L)
+    
+    circularSeekbar.onProgressChanged { progress, _ ->
+        findViewById<TextView>(R.id.tvprogress).text = "$progress"
+    }
 ```
 
 We recommend to use equal padding for the `CircularSeekbar` else touch event might now work for now.
