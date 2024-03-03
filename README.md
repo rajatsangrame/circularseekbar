@@ -2,7 +2,7 @@
 
 [![Release](https://jitpack.io/v/rajatsangrame/ImagesSubRedditViewer.svg)](https://jitpack.io/#rajatsangrame/ImagesSubRedditViewer)
 
-<img src="seekbar.gif" width="40%">
+Watch the demo video [here](circularseekbar.mp4).
 
 Similar to the android Seekbar, Circular Seekbar is created to seek the progress in circular shape.
 This library contains two seekbars. One is simple `CircularSeekbar` and other is `RainbowSeekbar`.
