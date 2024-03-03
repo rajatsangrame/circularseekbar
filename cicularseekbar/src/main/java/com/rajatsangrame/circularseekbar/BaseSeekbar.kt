@@ -19,7 +19,7 @@ abstract class BaseSeekbar(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-    private var listener: OnProgressChangeListener? = null
+    internal var listener: OnProgressChangeListener? = null
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     companion object {
@@ -28,8 +28,8 @@ abstract class BaseSeekbar(
         const val DEFAULT_BG_COLOR = Color.GRAY
         const val DEFAULT_THUMB_COLOR = Color.WHITE
         const val DEFAULT_THICKNESS_DP = 20
-        const val DEFAULT_THUMB_RADIUS_DP = 10
-        const val DEFAULT_THUMB_PADDING_DP = 4
+        const val DEFAULT_THUMB_RADIUS_DP = 12
+        const val DEFAULT_TOUCHING_PADDING_DP = 8
         const val DEFAULT_PROGRESS = 0.1f
         const val DEFAULT_SHOW_THUMB = true
         const val DEFAULT_ENABLE_TOUCH = true
@@ -45,7 +45,7 @@ abstract class BaseSeekbar(
      */
     internal var isThumbPressed = false
     internal var progress: Float = DEFAULT_PROGRESS
-    internal var thumbPadding = DEFAULT_THUMB_PADDING_DP.dpToPx
+    internal var touchPadding = DEFAULT_TOUCHING_PADDING_DP.dpToPx
     internal var thickness = DEFAULT_THICKNESS_DP.dpToPx
     internal var thumbRadius = DEFAULT_THUMB_RADIUS_DP.dpToPx
     internal var showThumb = DEFAULT_SHOW_THUMB
@@ -139,18 +139,18 @@ abstract class BaseSeekbar(
     fun getThumbRadius() = thumbRadius.pxToDp
 
     /**
-     *  Adjust the thumb padding surface according. This can be useful if thumb radius
-     *  is small and difficult to touch
+     *  Adjust the touch padding surface according. This can be useful if
+     *  thumb radius or seekbar thickness is small and difficult to touch
      */
-    fun setThumbPadding(padding: Int) {
-        setThumbPadding(padding.dpToPx)
+    fun setTouchPadding(padding: Int) {
+        setThouchPadding(padding.dpToPx)
     }
 
-    protected fun setThumbPadding(@Px padding: Float) {
-        this.thumbPadding = padding
+    protected fun setThouchPadding(@Px padding: Float) {
+        this.touchPadding = padding
     }
 
-    private fun getThumbPadding() = this.thumbPadding.pxToDp
+    private fun getTouchPadding() = this.touchPadding.pxToDp
 
     fun setShowThumb(boolean: Boolean) {
         this.showThumb = boolean
@@ -166,7 +166,7 @@ abstract class BaseSeekbar(
 
     protected abstract fun isProgressBarRegion(p: PointF): Boolean
 
-    protected abstract fun getSweepAngle(p: PointF): Float
+    protected abstract fun getProgressAngle(p: PointF): Float
 
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         super.setPadding(left, top, right, bottom)
@@ -194,7 +194,7 @@ abstract class BaseSeekbar(
             val thumbPadding =
                 array.getDimension(
                     R.styleable.BaseSeekbar_thumbPadding,
-                    DEFAULT_THUMB_PADDING_DP.dpToPx
+                    DEFAULT_TOUCHING_PADDING_DP.dpToPx
                 )
             val thumbRadius =
                 array.getDimension(
@@ -218,7 +218,7 @@ abstract class BaseSeekbar(
             setThumbColor(thumbColor)
             setThickness(thickness)
             setThumbRadius(thumbRadius)
-            setThumbPadding(thumbPadding)
+            setThouchPadding(thumbPadding)
             this.showThumb = showThumb
             this.enableTouch = enableTouch
             this.progress = progress

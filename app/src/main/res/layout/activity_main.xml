@@ -7,7 +7,7 @@
     android:background="@color/black"
     tools:context=".KotlinSampleActivity">
 
-    <com.rajatsangrame.circularseekbar.CircularSeekbar
+    <com.rajatsangrame.circularseekbar.RainbowSeekbar
         android:id="@+id/circularseekbar"
         android:layout_width="250dp"
         android:layout_height="250dp"
@@ -24,7 +24,7 @@
         app:startAngle="top"
         app:thickness="20dp"
         app:thumbColor="#ff5722"
-        app:thumbPadding="4dp"
+        app:thumbPadding="16dp"
         app:thumbRadius="16dp" />
 
     <TextView

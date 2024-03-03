@@ -15,13 +15,14 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.rajatsangrame.circularseekbar.CircularSeekbar
+import com.rajatsangrame.circularseekbar.BaseSeekbar
+import com.rajatsangrame.circularseekbar.RainbowSeekbar
 import com.rajatsangrame.circularseekbar.StartAngle
 import com.rajatsangrame.circularseekbar.Util.onProgressChanged
 
 class KotlinSampleActivity : AppCompatActivity() {
 
-    private lateinit var circularSeekbar: CircularSeekbar
+    private lateinit var seekbar: BaseSeekbar
     private lateinit var thickness: SeekBar
     private lateinit var thumbRadius: SeekBar
 
@@ -37,8 +38,8 @@ class KotlinSampleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         title = TAG
 
-        circularSeekbar = findViewById(R.id.circularseekbar)
-        circularSeekbar.onProgressChanged { progress, _ ->
+        seekbar = findViewById(R.id.circularseekbar)
+        seekbar.onProgressChanged { progress, _ ->
             findViewById<TextView>(R.id.tvprogress).text = "$progress"
         }
 
@@ -49,15 +50,15 @@ class KotlinSampleActivity : AppCompatActivity() {
                 when (seekBar.id) {
                     R.id.thickness -> {
                         val value = (progress * 40) / 100
-                        circularSeekbar.setThickness(value)
+                        seekbar.setThickness(value)
                     }
 
                     R.id.thumbradius -> {
                         val value = (progress * 20) / 100
-                        circularSeekbar.setThumbRadius(value)
+                        seekbar.setThumbRadius(value)
                     }
                 }
-                circularSeekbar.invalidate()
+                seekbar.invalidate()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -83,25 +84,25 @@ class KotlinSampleActivity : AppCompatActivity() {
                     when (parent.id) {
                         R.id.startangle -> {
                             val angle = startAngles[position]
-                            circularSeekbar.setStartAngle(angle)
+                            //circularSeekbar.setStartAngle(angle)
                         }
 
                         R.id.bgcolor -> {
                             val color = materialColors[position]
-                            circularSeekbar.setBackgroundColor(Color.parseColor(color))
+                            seekbar.setBackgroundColor(Color.parseColor(color))
                         }
 
                         R.id.progresscolor -> {
                             val color = materialColors[position]
-                            circularSeekbar.setProgressColor(Color.parseColor(color))
+                            seekbar.setProgressColor(Color.parseColor(color))
                         }
 
                         R.id.thumbcolor -> {
                             val color = materialColors[position]
-                            circularSeekbar.setThumbColor(Color.parseColor(color))
+                            seekbar.setThumbColor(Color.parseColor(color))
                         }
                     }
-                    circularSeekbar.invalidate()
+                    seekbar.invalidate()
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -117,11 +118,11 @@ class KotlinSampleActivity : AppCompatActivity() {
         val checkedChangeListener =
             CompoundButton.OnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
                 if (buttonView.id == R.id.enabletouch) {
-                    circularSeekbar.setEnableTouch(isChecked)
+                    seekbar.setEnableTouch(isChecked)
                 } else if (buttonView.id == R.id.showthumb) {
-                    circularSeekbar.setShowThumb(isChecked)
+                    seekbar.setShowThumb(isChecked)
                 }
-                circularSeekbar.invalidate()
+                seekbar.invalidate()
             }
         enableTouch.setOnCheckedChangeListener(checkedChangeListener)
         showThumb.setOnCheckedChangeListener(checkedChangeListener)
@@ -130,7 +131,7 @@ class KotlinSampleActivity : AppCompatActivity() {
         updateSeekbarValues()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            circularSeekbar.setAnimatedProgress(75f, 600L)
+            seekbar.setAnimatedProgress(25f, 600L)
         }, 800)
 
         findViewById<Button>(R.id.button).setOnClickListener {
@@ -147,8 +148,9 @@ class KotlinSampleActivity : AppCompatActivity() {
         thickness.progress = 100
         thumbRadius.progress = 100
 
-        showThumb.isChecked = true
+        showThumb.isChecked = false
         enableTouch.isChecked = true
+        (seekbar as? RainbowSeekbar)?.setSweepAngle(270f)
     }
 
     companion object {

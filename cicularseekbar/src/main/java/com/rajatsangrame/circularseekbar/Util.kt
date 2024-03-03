@@ -6,7 +6,7 @@ object Util {
 
     internal val Int.dpToPx: Float get() = this * Resources.getSystem().displayMetrics.density
     internal val Float.pxToDp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
-    fun CircularSeekbar.onProgressChanged(callback: (Float, Boolean) -> Unit) {
+    fun BaseSeekbar.onProgressChanged(callback: (Float, Boolean) -> Unit) {
         this.setProgressChangeListener(object : OnProgressChangeListener {
             override fun onProgressChanged(
                 seekBar: BaseSeekbar,

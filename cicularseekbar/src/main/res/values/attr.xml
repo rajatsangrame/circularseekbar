@@ -25,4 +25,8 @@
             <enum name="bottom" value="3" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="RainbowSeekbar">
+        <attr name="sweepAngle" format="float" />
+    </declare-styleable>
 </resources>

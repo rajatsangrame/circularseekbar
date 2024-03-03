@@ -17,8 +17,8 @@ class CircularSeekbar @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-    private var listener: OnProgressChangeListener? = null
-) : BaseSeekbar(context, attrs, defStyleAttr, defStyleRes) {
+    listener: OnProgressChangeListener? = null
+) : BaseSeekbar(context, attrs, defStyleAttr, defStyleRes, listener) {
 
     private var startAngle: StartAngle = StartAngle.TOP
 
@@ -42,11 +42,11 @@ class CircularSeekbar @JvmOverloads constructor(
             (center.x + innerRadius),
             (center.y + innerRadius)
         )
-        val sweepAngle = (360 * progress) / 100
+        val progressSweepAngle = (360 * progress) / 100
         canvas.drawArc(rectF, startAngle.value, 360f, false, backgroundPaint)
-        canvas.drawArc(rectF, startAngle.value, sweepAngle, false, progressPaint)
+        canvas.drawArc(rectF, startAngle.value, progressSweepAngle, false, progressPaint)
         if (showThumb) {
-            val sweepAngleRadians = Math.toRadians(startAngle.value + sweepAngle.toDouble())
+            val sweepAngleRadians = Math.toRadians(startAngle.value + progressSweepAngle.toDouble())
             val cx = rectF.centerX() + (rectF.width() / 2) * cos(sweepAngleRadians)
             val cy = rectF.centerY() + (rectF.height() / 2) * sin(sweepAngleRadians)
             canvas.drawCircle(cx.toFloat(), cy.toFloat(), thumbRadius, thumbPaint)
@@ -60,11 +60,11 @@ class CircularSeekbar @JvmOverloads constructor(
     override fun isProgressBarRegion(p: PointF): Boolean {
         val distance = sqrt((p.x - center.x).pow(2) + (p.y - center.y).pow(2))
         // selecting max touch area according to padding or thumb radius
-        val padding = max(thumbPadding, thumbRadius * 2)
+        val padding = max(touchPadding, thumbRadius * 2)
         return (distance in (innerRadius - padding)..(outerRadius + padding))
     }
 
-    override fun getSweepAngle(p: PointF): Float {
+    override fun getProgressAngle(p: PointF): Float {
         val angleRadians = kotlin.math.atan2(p.y - center.y, p.x - center.x)
         var angleDegrees = Math.toDegrees(angleRadians.toDouble()).toFloat()
         if (angleDegrees < 0) {
@@ -80,16 +80,6 @@ class CircularSeekbar @JvmOverloads constructor(
         return angleDegrees
     }
 
-    init {
-        attrs?.let {
-            val array = context.obtainStyledAttributes(it, R.styleable.CircularSeekbar)
-            val startAngle: StartAngle =
-                StartAngle.get(array.getInteger(R.styleable.CircularSeekbar_startAngle, 0))
-            this.startAngle = startAngle
-            array.recycle()
-        }
-    }
-
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (!enableTouch) return false
 
@@ -103,11 +93,13 @@ class CircularSeekbar @JvmOverloads constructor(
                     isThumbPressed = true
                 }
                 listener?.onStartTouchEvent(this@CircularSeekbar)
+                return true
             }
 
             MotionEvent.ACTION_UP -> {
                 isThumbPressed = false
                 listener?.onStopTouchEvent(this@CircularSeekbar)
+                return true
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -117,12 +109,23 @@ class CircularSeekbar @JvmOverloads constructor(
                 val x = event.x
                 val y = event.y
                 val p = PointF(x, y)
-                val angleDegrees = getSweepAngle(p)
+                val angleDegrees = getProgressAngle(p)
                 progress = (angleDegrees * 100f) / 360f
                 listener?.onProgressChanged(this@CircularSeekbar, progress, true)
                 invalidate()
+                return true
             }
         }
-        return true
+        return false
+    }
+
+    init {
+        attrs?.let {
+            val array = context.obtainStyledAttributes(it, R.styleable.CircularSeekbar)
+            val startAngle: StartAngle =
+                StartAngle.get(array.getInteger(R.styleable.CircularSeekbar_startAngle, 0))
+            this.startAngle = startAngle
+            array.recycle()
+        }
     }
 }
