@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -72,7 +74,7 @@ abstract class BaseSeekbar(
         setThickness(size.dpToPx)
     }
 
-    protected fun setThickness(@Px size: Float) {
+    private fun setThickness(@Px size: Float) {
         progressPaint.strokeWidth = size
         backgroundPaint.strokeWidth = size
         thickness = size
@@ -124,15 +126,53 @@ abstract class BaseSeekbar(
         progressPaint.color = color
     }
 
+    /**
+     * It uses [SweepGradient] with color gradients as progress color.
+     *  Example,
+     *
+     *      seekbar.setProgressColor(
+     *          intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
+     *          floatArrayOf(0f, 0.333f, 0.667f, 1f)
+     *      )
+     *
+     * @param colors An array of [ColorInt]. There must be at least 2 colors in the array.
+     * @param positions The relative position of each corresponding color in the colors array,
+     * beginning with 0 and ending with 1.0.
+     * If positions is NULL, then the colors are automatically spaced evenly.
+     */
+    fun setProgressColor(colors: IntArray, positions: FloatArray?) {
+        val shader: Shader = SweepGradient(0f, 0f, colors, positions)
+        progressPaint.setShader(shader)
+    }
+
     fun setThumbColor(@ColorInt color: Int) {
         thumbPaint.color = color
+    }
+
+    /**
+     * It uses [SweepGradient] with color gradients as thumb color.
+     *  Example,
+     *
+     *      seekbar.setThumbColor(
+     *          intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
+     *          floatArrayOf(0f, 0.333f, 0.667f, 1f)
+     *      )
+     *
+     * @param colors An array of [ColorInt]. There must be at least 2 colors in the array.
+     * @param positions The relative position of each corresponding color in the colors array,
+     * beginning with 0 and ending with 1.0.
+     * If positions is NULL, then the colors are automatically spaced evenly.
+     */
+    fun setThumbColor(colors: IntArray, positions: FloatArray?) {
+        val shader: Shader = SweepGradient(0f, 0f, colors, positions)
+        thumbPaint.setShader(shader)
     }
 
     fun setThumbRadius(radius: Int) {
         setThumbRadius(radius.dpToPx)
     }
 
-    protected fun setThumbRadius(@Px radius: Float) {
+    private fun setThumbRadius(@Px radius: Float) {
         thumbRadius = radius
     }
 
@@ -143,10 +183,10 @@ abstract class BaseSeekbar(
      *  thumb radius or seekbar thickness is small and difficult to touch
      */
     fun setTouchPadding(padding: Int) {
-        setThouchPadding(padding.dpToPx)
+        setTouchPadding(padding.dpToPx)
     }
 
-    protected fun setThouchPadding(@Px padding: Float) {
+    private fun setTouchPadding(@Px padding: Float) {
         this.touchPadding = padding
     }
 
@@ -218,7 +258,7 @@ abstract class BaseSeekbar(
             setThumbColor(thumbColor)
             setThickness(thickness)
             setThumbRadius(thumbRadius)
-            setThouchPadding(thumbPadding)
+            setTouchPadding(thumbPadding)
             this.showThumb = showThumb
             this.enableTouch = enableTouch
             this.progress = progress

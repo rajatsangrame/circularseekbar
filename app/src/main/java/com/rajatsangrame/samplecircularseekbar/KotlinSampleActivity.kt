@@ -205,6 +205,10 @@ class KotlinSampleActivity : AppCompatActivity() {
 
         showThumb.isChecked = true
         enableTouch.isChecked = true
+        seekbar.setProgressColor(
+            intArrayOf(Color.RED, Color.YELLOW, Color.WHITE, Color.GREEN),
+            floatArrayOf(0f, 0.333f, 0.667f, 1f)
+        )
     }
 
     companion object {
