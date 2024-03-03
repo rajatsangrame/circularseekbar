@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="seekbarSelect">
-        <item>Rainbow</item>
-        <item>CircularSeekbar</item>
-    </string-array>
-</resources>
-
-
