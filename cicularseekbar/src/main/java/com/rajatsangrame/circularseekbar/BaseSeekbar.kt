@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
+import androidx.core.math.MathUtils
 import com.rajatsangrame.circularseekbar.Util.dpToPx
 import com.rajatsangrame.circularseekbar.Util.pxToDp
 
@@ -25,10 +26,11 @@ abstract class BaseSeekbar(
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     companion object {
-        private const val TAG = "CircularSeekbar"
+        internal const val TAG = "CircularSeekbar"
         const val DEFAULT_PROGRESS_COLOR = Color.WHITE
         const val DEFAULT_BG_COLOR = Color.GRAY
         const val DEFAULT_THUMB_COLOR = Color.WHITE
+        const val DEFAULT_MAX_PROGRESS = 100f
         const val DEFAULT_THICKNESS_DP = 20
         const val DEFAULT_THUMB_RADIUS_DP = 12
         const val DEFAULT_TOUCHING_PADDING_DP = 8
@@ -47,6 +49,7 @@ abstract class BaseSeekbar(
      */
     internal var isThumbPressed = false
     internal var progress: Float = DEFAULT_PROGRESS
+    internal var maxProgress: Float = DEFAULT_MAX_PROGRESS
     internal var touchPadding = DEFAULT_TOUCHING_PADDING_DP.dpToPx
     internal var thickness = DEFAULT_THICKNESS_DP.dpToPx
     internal var thumbRadius = DEFAULT_THUMB_RADIUS_DP.dpToPx
@@ -94,10 +97,13 @@ abstract class BaseSeekbar(
     fun setProgress(progress: Float, fromUser: Boolean = false) {
         val range = 1f..100f
         if (progress !in range) {
-            throw IllegalArgumentException("$progress is out of range. It should lies between 1 to 100")
+            val e =
+                IllegalArgumentException("$progress is out of range. It should lies between 1 to 100")
+            Log.e(TAG, "setProgress: ", e)
         }
-        this.progress = progress
-        listener?.onProgressChanged(this, progress, fromUser)
+        val p = MathUtils.clamp(progress, 0f, maxProgress)
+        this.progress = p
+        listener?.onProgressChanged(this, p, fromUser)
         invalidate()
     }
 
@@ -116,6 +122,12 @@ abstract class BaseSeekbar(
     }
 
     fun getProgress() = progress
+
+    fun setMaximumProgress(progress: Float) {
+        this.maxProgress = progress
+    }
+
+    fun getMaximumProgress() = this.maxProgress
 
 
     override fun setBackgroundColor(@ColorInt color: Int) {
@@ -136,7 +148,8 @@ abstract class BaseSeekbar(
      * beginning with 0 and ending with 1.0.
      * If positions is NULL, then the colors are automatically spaced evenly.
      */
-    fun setBackgroundGradient(colors: IntArray, positions: FloatArray?) {
+    @JvmOverloads
+    fun setBackgroundGradient(colors: IntArray, positions: FloatArray? = null) {
         val shader: Shader = SweepGradient(0f, 0f, colors, positions)
         backgroundPaint.setShader(shader)
     }
@@ -163,7 +176,8 @@ abstract class BaseSeekbar(
      * beginning with 0 and ending with 1.0.
      * If positions is NULL, then the colors are automatically spaced evenly.
      */
-    fun setProgressGradient(colors: IntArray, positions: FloatArray?) {
+    @JvmOverloads
+    fun setProgressGradient(colors: IntArray, positions: FloatArray? = null) {
         val shader: Shader = SweepGradient(0f, 0f, colors, positions)
         progressPaint.setShader(shader)
     }
@@ -190,7 +204,8 @@ abstract class BaseSeekbar(
      * beginning with 0 and ending with 1.0.
      * If positions is NULL, then the colors are automatically spaced evenly.
      */
-    fun setThumbGradient(colors: IntArray, positions: FloatArray?) {
+    @JvmOverloads
+    fun setThumbGradient(colors: IntArray, positions: FloatArray? = null) {
         val shader: Shader = SweepGradient(0f, 0f, colors, positions)
         thumbPaint.setShader(shader)
     }
@@ -275,6 +290,8 @@ abstract class BaseSeekbar(
 
             val progress =
                 array.getFloat(R.styleable.BaseSeekbar_progress, DEFAULT_PROGRESS)
+            val maxProgress =
+                array.getFloat(R.styleable.BaseSeekbar_maxProgress, DEFAULT_MAX_PROGRESS)
 
             val showThumb =
                 array.getBoolean(R.styleable.BaseSeekbar_showThumb, DEFAULT_SHOW_THUMB)
@@ -293,6 +310,7 @@ abstract class BaseSeekbar(
             this.showThumb = showThumb
             this.enableTouch = enableTouch
             this.progress = progress
+            this.maxProgress = maxProgress
 
             array.recycle()
         }

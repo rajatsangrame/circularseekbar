@@ -42,7 +42,7 @@ class CircularSeekbar @JvmOverloads constructor(
             (center.x + innerRadius),
             (center.y + innerRadius)
         )
-        val progressSweepAngle = (360 * progress) / 100
+        val progressSweepAngle = (360 * progress) / maxProgress
         canvas.drawArc(rectF, startAngle.value, 360f, false, backgroundPaint)
         canvas.drawArc(rectF, startAngle.value, progressSweepAngle, false, progressPaint)
         if (showThumb) {
@@ -110,7 +110,7 @@ class CircularSeekbar @JvmOverloads constructor(
                 val y = event.y
                 val p = PointF(x, y)
                 val angleDegrees = getProgressAngle(p)
-                progress = (angleDegrees * 100f) / 360f
+                progress = (angleDegrees * maxProgress) / 360f
                 listener?.onProgressChanged(this@CircularSeekbar, progress, true)
                 invalidate()
                 return true

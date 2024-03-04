@@ -15,6 +15,7 @@
         <attr name="enableTouch" format="boolean" />
 
         <attr name="progress" format="float" />
+        <attr name="maxProgress" format="float" />
     </declare-styleable>
 
     <declare-styleable name="CircularSeekbar">

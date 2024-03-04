@@ -41,6 +41,7 @@
             android:visibility="visible"
             app:backgroundColor="#9e9e9e"
             app:enableTouch="true"
+            app:maxProgress="100"
             app:progress="22"
             app:progressColor="#03a9f4"
             app:showThumb="true"

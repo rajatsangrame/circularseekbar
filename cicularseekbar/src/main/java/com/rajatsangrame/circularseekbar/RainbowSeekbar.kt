@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
+import androidx.core.math.MathUtils
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
@@ -25,9 +27,12 @@ class RainbowSeekbar @JvmOverloads constructor(
     fun setSweepAngle(sweepAngle: Float) {
         val range = 1f..360f
         if (sweepAngle !in range) {
-            throw IllegalArgumentException("$sweepAngle is out of range. It should lies between 1 to 360")
+            val e =
+                IllegalArgumentException("$sweepAngle is out of range. It should lies between 1 to 360")
+            Log.e(TAG, "setSweepAngle: ", e)
         }
-        this.sweepAngle = sweepAngle
+        val angle = MathUtils.clamp(sweepAngle, 0f, 360f)
+        this.sweepAngle = angle
     }
 
     private fun getSweepAngle() = sweepAngle
@@ -93,16 +98,16 @@ class RainbowSeekbar @JvmOverloads constructor(
                 val y = event.y
                 val p = PointF(x, y)
                 val angleDegrees = getProgressAngle(p)
-                val tempProgress = (angleDegrees * 100f) / sweepAngle
+                val tempProgress = (angleDegrees * maxProgress) / sweepAngle
 
                 // Allow padding angle of 10 degree as touch event will
-                // not give exact 0 or 100 progress
-                val padding = 10f
-                if (tempProgress in 0f..100f) {
+                // not reach min max limit accurately
+                val anglePadding = 10f
+                if (tempProgress in 0f..maxProgress) {
                     progress = tempProgress
-                } else if (angleDegrees in sweepAngle..sweepAngle + padding) {
-                    progress = 100f
-                } else if (angleDegrees in 360f - padding..360f) {
+                } else if (angleDegrees in sweepAngle..sweepAngle + anglePadding) {
+                    progress = maxProgress
+                } else if (angleDegrees in 360f - anglePadding..360f) {
                     progress = 0f
                 } else return false
 
@@ -127,7 +132,7 @@ class RainbowSeekbar @JvmOverloads constructor(
             (center.x + innerRadius),
             (center.y + innerRadius)
         )
-        val progressAngle = (sweepAngle * progress) / 100
+        val progressAngle = (sweepAngle * progress) / maxProgress
         val startAngle = -(sweepAngle / 2) - 90
         canvas.drawArc(rectF, startAngle, sweepAngle, false, backgroundPaint)
         canvas.drawArc(rectF, startAngle, progressAngle, false, progressPaint)
