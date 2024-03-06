@@ -1,19 +1,14 @@
 # circularseekbar
 
-[![Release](https://jitpack.io/v/rajatsangrame/ImagesSubRedditViewer.svg)](https://jitpack.io/#rajatsangrame/ImagesSubRedditViewer)
-
-
-https://github.com/rajatsangrame/circularseekbar/assets/33744237/14de59fc-4aca-4ab3-8e85-17a54c9d8bdf
-
-
+[![](https://jitpack.io/v/rajatsangrame/circularseekbar.svg)](https://jitpack.io/#rajatsangrame/circularseekbar)
 
 Similar to the android Seekbar, Circular Seekbar is created to seek the progress in circular shape.
 This library contains two seekbars. One is simple `CircularSeekbar` and other is `RainbowSeekbar`.
-Both provides feature like gradients, colors, animated progress etc but the major difference is, 
-`RainbowSeekbar` currently doesn't support rotation and focused on sweep angle in fixed position 
+Both provides feature like gradients, colors, animated progress etc but the major difference is,
+`RainbowSeekbar` currently doesn't support rotation and focused on sweep angle in fixed position
 (start position is bottom) and `CircularSeekbar` supports rotation.
 
-Below are some of the key features provided by Circular Seekbar 
+Below are some of the key features provided by Circular Seekbar
 
 ## Features
 
