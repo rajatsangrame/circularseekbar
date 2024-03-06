@@ -63,6 +63,7 @@ properties in xml declaration. Check the below example for the reference.
 
 <com.rajatsangrame.circularseekbar.RainbowSeekbar
     ...
+    app:roundCorners="true"
     app:sweepAngle="270"
 
 ```
@@ -80,6 +81,7 @@ Check the below example for the reference.
     circularSeekbar.setThumbColor(Color.parseColor(color))
     circularSeekbar.setEnableTouch(isChecked)
     circularSeekbar.setShowThumb(isChecked)
+    circularSeekbar.setRoundCorners(true)
     
     circularSeekbar.setAnimatedProgress(progress = 75f, duration = 600L)
     
