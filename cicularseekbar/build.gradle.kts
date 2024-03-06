@@ -49,7 +49,13 @@ publishing {
             groupId = "com.github.rajatsangrame"
             artifactId = "circularseekbar"
             version = "1.0.0"
+            pom {
+                description = "First stable release"
+            }
         }
+    }
+    repositories {
+        mavenLocal()
     }
 }
 
