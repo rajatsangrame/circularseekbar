@@ -2,6 +2,7 @@ package com.rajatsangrame.circularseekbar
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.util.Log
@@ -36,6 +37,13 @@ open class RainbowSeekbar @JvmOverloads constructor(
     }
 
     private fun getSweepAngle() = sweepAngle
+
+
+    fun setRoundCorners(boolean: Boolean) {
+        val cap = if (boolean) Paint.Cap.ROUND else Paint.Cap.BUTT
+        backgroundPaint.strokeCap = cap
+        progressPaint.strokeCap = cap
+    }
 
     override fun isProgressBarRegion(p: PointF): Boolean {
         val distance = sqrt((p.x - center.x).pow(2) + (p.y - center.y).pow(2))
@@ -150,6 +158,9 @@ open class RainbowSeekbar @JvmOverloads constructor(
             val array = context.obtainStyledAttributes(it, R.styleable.RainbowSeekbar)
             val sweepAngle =
                 array.getFloat(R.styleable.RainbowSeekbar_sweepAngle, DEFAULT_SWEEP_ANGLE)
+            val roundCorners =
+                array.getBoolean(R.styleable.RainbowSeekbar_roundCorners, true)
+            setRoundCorners(roundCorners)
             this.sweepAngle = sweepAngle
             array.recycle()
         }

@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SampleCircularSeekbar"
 include(":app")
-include(":cicularseekbar")
+include(":circularseekbar")

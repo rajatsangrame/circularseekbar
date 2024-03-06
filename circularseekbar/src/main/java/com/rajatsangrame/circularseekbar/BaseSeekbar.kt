@@ -85,12 +85,8 @@ abstract class BaseSeekbar(
 
     fun getThickness() = thickness.pxToDp
 
-    fun setProgressChangeListener(listener: OnProgressChangeListener) {
+    fun setProgressChangeListener(listener: OnProgressChangeListener?) {
         this.listener = listener
-    }
-
-    fun removeProgressChangeListener() {
-        this.listener = null
     }
 
     @JvmOverloads

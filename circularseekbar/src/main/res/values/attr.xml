@@ -28,6 +28,7 @@
     </declare-styleable>
 
     <declare-styleable name="RainbowSeekbar">
+        <attr name="roundCorners" format="boolean" />
         <attr name="sweepAngle" format="float" />
     </declare-styleable>
 </resources>
