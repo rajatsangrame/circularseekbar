@@ -4,5 +4,5 @@ jdk:
 before_install:
   - ./scripts/prepareJitpackEnvironment.sh
 install:
-  - FILE="-Dfile=circularseekbar-release.aar" #com-atifqamar-customtoast.aar
+  - FILE="-Dfile=circularseekbar-release-1.0.0.aar"
   - mvn install:install-file $FILE -DgroupId=com.github.rajatsangrame -DartifactId=circularseekbar -Dversion=1.0.0 -Dpackaging=aar -DgeneratePom=true
