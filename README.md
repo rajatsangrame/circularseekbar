@@ -1,6 +1,6 @@
 # circularseekbar
 
-[![Release](https://jitpack.io/v/rajatsangrame/ImagesSubRedditViewer.svg)](https://jitpack.io/#rajatsangrame/ImagesSubRedditViewer)
+[![Release](https://jitpack.io/v/rajatsangrame/circularseekbar.svg)](https://jitpack.io/#rajatsangrame/circularseekbar)
 
 
 https://github.com/rajatsangrame/circularseekbar/assets/33744237/14de59fc-4aca-4ab3-8e85-17a54c9d8bdf
@@ -36,7 +36,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.rajatsangrame:circularseekbar:1.0.0'
+    implementation 'com.github.rajatsangrame:circularseekbar:1.0.1'
 }
 ```
 
@@ -63,6 +63,7 @@ properties in xml declaration. Check the below example for the reference.
 
 <com.rajatsangrame.circularseekbar.RainbowSeekbar
     ...
+    app:roundCorners="true"
     app:sweepAngle="270"
 
 ```
@@ -80,12 +81,13 @@ Check the below example for the reference.
     circularSeekbar.setThumbColor(Color.parseColor(color))
     circularSeekbar.setEnableTouch(isChecked)
     circularSeekbar.setShowThumb(isChecked)
-    
     circularSeekbar.setAnimatedProgress(progress = 75f, duration = 600L)
-    
     circularSeekbar.onProgressChanged { progress, _ ->
         findViewById<TextView>(R.id.tvprogress).text = "$progress"
     }
+
+    rainbowSeekbar.setRoundCorners(true)
+    rainbowSeekbar.setSweepAngle(270f)
 ```
 
 We recommend to use equal padding for the `CircularSeekbar` else touch event might now work for now.
