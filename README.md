@@ -21,7 +21,8 @@ Below are some of the key features provided by Circular Seekbar
 * Apply gradients and colors to seekbar elements.
 * Change the sweep angle of seekbar between 0 to 360 degrees.
 * Rotation (Moving start angle of seekbar by 0, 90, 180 and 270 degrees).
-* Option to change its thickness, thumb-radius, enable/disable touch event, thumb visibility etc.
+* Option to change its thickness, thumb-radius, enable/disable touch event, thumb visibility etc. 
+* Option to change the minimum and maximum range of the seekbar.
 
 Clone this repository play with the sample app to know more.
 
