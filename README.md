@@ -36,7 +36,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.rajatsangrame:circularseekbar:1.0.1'
+    implementation 'com.github.rajatsangrame:circularseekbar:1.0.2'
 }
 ```
 
@@ -54,7 +54,9 @@ properties in xml declaration. Check the below example for the reference.
     app:progress="22" 
     app:progressColor="#03a9f4"
     app:showThumb="true"
-    app:startAngle="top" 
+    app:startAngle="top"
+    app:maxProgress="100"
+    app:minProgress="0"
     app:thickness="20dp" 
     app:thumbColor="#ff5722"
     app:thumbPadding="4dp" 
@@ -78,9 +80,12 @@ Check the below example for the reference.
     circularSeekbar.setStartAngle(StartAngle.TOP)
     circularSeekbar.setBackgroundColor(Color.parseColor(color))
     circularSeekbar.setProgressColor(Color.parseColor(color))
+    circularSeekbar.setProgressGradient(intArrayOf(Color.RED, Color.YELLOW, Color.GREEN))
     circularSeekbar.setThumbColor(Color.parseColor(color))
     circularSeekbar.setEnableTouch(isChecked)
     circularSeekbar.setShowThumb(isChecked)
+    circularSeekbar.setMinimumProgress(0f)
+    circularSeekbar.setMaximumProgress(100f)
     circularSeekbar.setAnimatedProgress(progress = 75f, duration = 600L)
     circularSeekbar.onProgressChanged { progress, _ ->
         findViewById<TextView>(R.id.tvprogress).text = "$progress"

@@ -31,6 +31,7 @@ abstract class BaseSeekbar(
         const val DEFAULT_BG_COLOR = Color.GRAY
         const val DEFAULT_THUMB_COLOR = Color.WHITE
         const val DEFAULT_MAX_PROGRESS = 100f
+        const val DEFAULT_MIN_PROGRESS = 0f
         const val DEFAULT_THICKNESS_DP = 20
         const val DEFAULT_THUMB_RADIUS_DP = 12
         const val DEFAULT_TOUCHING_PADDING_DP = 8
@@ -39,17 +40,19 @@ abstract class BaseSeekbar(
         const val DEFAULT_ENABLE_TOUCH = true
     }
 
-    internal val rectF = RectF()
-    internal var innerRadius = 0f
-    internal var outerRadius = 0f
-    internal val center = PointF(0f, 0f)
+    protected val rectF = RectF()
+    protected var innerRadius = 0f
+    protected var outerRadius = 0f
+    protected val center = PointF(0f, 0f)
 
     /**
      * This is used in onTouchEvent to simulate the seekbar progress
      */
-    internal var isThumbPressed = false
+    protected var isThumbPressed = false
+
     internal var progress: Float = DEFAULT_PROGRESS
     internal var maxProgress: Float = DEFAULT_MAX_PROGRESS
+    internal var minProgress: Float = DEFAULT_MIN_PROGRESS
     internal var touchPadding = DEFAULT_TOUCHING_PADDING_DP.dpToPx
     internal var thickness = DEFAULT_THICKNESS_DP.dpToPx
     internal var thumbRadius = DEFAULT_THUMB_RADIUS_DP.dpToPx
@@ -91,13 +94,13 @@ abstract class BaseSeekbar(
 
     @JvmOverloads
     fun setProgress(progress: Float, fromUser: Boolean = false) {
-        val range = 1f..100f
+        val range = minProgress..maxProgress
         if (progress !in range) {
             val e =
-                IllegalArgumentException("$progress is out of range. It should lies between 1 to 100")
+                IllegalArgumentException("Progress $progress is out of range. It must lie between $minProgress to $maxProgress")
             Log.e(TAG, "setProgress: ", e)
         }
-        val p = MathUtils.clamp(progress, 0f, maxProgress)
+        val p = MathUtils.clamp(progress, minProgress, maxProgress)
         this.progress = p
         listener?.onProgressChanged(this, p, fromUser)
         invalidate()
@@ -105,8 +108,8 @@ abstract class BaseSeekbar(
 
     @JvmOverloads
     fun setAnimatedProgress(progress: Float, duration: Long = 500L) {
-
-        val animator = ValueAnimator.ofFloat(this.progress, progress)
+        val p = MathUtils.clamp(progress, minProgress, maxProgress)
+        val animator = ValueAnimator.ofFloat(this.progress, p)
         animator.duration = duration
 
         animator.addUpdateListener { animation ->
@@ -121,6 +124,16 @@ abstract class BaseSeekbar(
 
     fun setMaximumProgress(progress: Float) {
         this.maxProgress = progress
+    }
+
+    fun setMinimumProgress(progress: Float) {
+        if (progress >= this.maxProgress) {
+            val e =
+                IllegalArgumentException("Minimum progress $progress, must be less than maximum progress $maxProgress")
+            Log.e(TAG, "setMinimumProgress: $e")
+            return
+        }
+        this.minProgress = progress
     }
 
     fun getMaximumProgress() = this.maxProgress
@@ -286,6 +299,8 @@ abstract class BaseSeekbar(
 
             val progress =
                 array.getFloat(R.styleable.BaseSeekbar_progress, DEFAULT_PROGRESS)
+            val minProgress =
+                array.getFloat(R.styleable.BaseSeekbar_minProgress, DEFAULT_MIN_PROGRESS)
             val maxProgress =
                 array.getFloat(R.styleable.BaseSeekbar_maxProgress, DEFAULT_MAX_PROGRESS)
 
@@ -305,8 +320,11 @@ abstract class BaseSeekbar(
             setTouchPadding(thumbPadding)
             this.showThumb = showThumb
             this.enableTouch = enableTouch
-            this.progress = progress
+            this.minProgress = minProgress
             this.maxProgress = maxProgress
+
+            val p = MathUtils.clamp(progress, minProgress, maxProgress)
+            this.progress = p
 
             array.recycle()
         }

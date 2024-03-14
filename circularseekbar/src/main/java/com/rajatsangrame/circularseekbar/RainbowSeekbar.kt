@@ -29,7 +29,7 @@ open class RainbowSeekbar @JvmOverloads constructor(
         val range = 1f..360f
         if (sweepAngle !in range) {
             val e =
-                IllegalArgumentException("$sweepAngle is out of range. It should lies between 1 to 360")
+                IllegalArgumentException("Sweep angle $sweepAngle is out of range. It should lies between 1 to 360")
             Log.e(TAG, "setSweepAngle: ", e)
         }
         val angle = MathUtils.clamp(sweepAngle, 0f, 360f)
@@ -106,17 +106,18 @@ open class RainbowSeekbar @JvmOverloads constructor(
                 val y = event.y
                 val p = PointF(x, y)
                 val angleDegrees = getProgressAngle(p)
-                val tempProgress = (angleDegrees * maxProgress) / sweepAngle
+                val tempProgress =
+                    minProgress + (angleDegrees * (maxProgress - minProgress) / sweepAngle)
 
                 // Allow padding angle of 10 degree as touch event will
                 // not reach min max limit accurately
-                val anglePadding = 10f
-                if (tempProgress in 0f..maxProgress) {
+                val sweepAnglePadding = 10f
+                if (tempProgress in minProgress..maxProgress) {
                     progress = tempProgress
-                } else if (angleDegrees in sweepAngle..sweepAngle + anglePadding) {
+                } else if (angleDegrees in sweepAngle..sweepAngle + sweepAnglePadding) {
                     progress = maxProgress
-                } else if (angleDegrees in 360f - anglePadding..360f) {
-                    progress = 0f
+                } else if (angleDegrees in 360f - sweepAnglePadding..360f) {
+                    progress = minProgress
                 } else return false
 
                 listener?.onProgressChanged(this@RainbowSeekbar, progress, true)
@@ -140,7 +141,8 @@ open class RainbowSeekbar @JvmOverloads constructor(
             (center.x + innerRadius),
             (center.y + innerRadius)
         )
-        val progressAngle = (sweepAngle * progress) / maxProgress
+        val progressAngle = sweepAngle * (progress - minProgress) / (maxProgress - minProgress)
+
         val startAngle = -(sweepAngle / 2) - 90
         canvas.drawArc(rectF, startAngle, sweepAngle, false, backgroundPaint)
         canvas.drawArc(rectF, startAngle, progressAngle, false, progressPaint)

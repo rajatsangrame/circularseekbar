@@ -224,6 +224,9 @@ class KotlinSampleActivity : AppCompatActivity() {
 
         showThumb.isChecked = true
         enableTouch.isChecked = true
+
+        seekbar.setMinimumProgress(0f)
+        seekbar.setMaximumProgress(100f)
     }
 
     private fun updateGradient(fn: (IntArray, FloatArray) -> Unit) {

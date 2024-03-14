@@ -4,5 +4,5 @@ jdk:
 before_install:
   - ./scripts/prepareJitpackEnvironment.sh
 install:
-  - FILE="-Dfile=circularseekbar-release-1.0.1.aar"
-  - mvn install:install-file $FILE -DgroupId=com.github.rajatsangrame -DartifactId=circularseekbar -Dversion=1.0.1 -Dpackaging=aar -DgeneratePom=true
+  - FILE="-Dfile=circularseekbar-release-1.0.2.aar"
+  - mvn install:install-file $FILE -DgroupId=com.github.rajatsangrame -DartifactId=circularseekbar -Dversion=1.0.2 -Dpackaging=aar -DgeneratePom=true

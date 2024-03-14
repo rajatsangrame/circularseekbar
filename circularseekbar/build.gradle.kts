@@ -48,9 +48,9 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.github.rajatsangrame"
             artifactId = "circularseekbar"
-            version = "1.0.1"
+            version = "1.0.2"
             pom {
-                description = "First stable release"
+                description = "Added min max maximum progress limit"
             }
         }
     }

@@ -16,6 +16,7 @@
 
         <attr name="progress" format="float" />
         <attr name="maxProgress" format="float" />
+        <attr name="minProgress" format="float" />
     </declare-styleable>
 
     <declare-styleable name="CircularSeekbar">
